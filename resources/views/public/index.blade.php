@@ -10,7 +10,6 @@
                 <div class="p-6 bg-white bg-opacity-20 shadow-lg rounded-xl mx-auto max-w-lg">
                     <p class="text-3xl font-bold mb-4 text-black">Bienvenido a UNISCORE</p>
                     <p class="text-lg mb-4 text-black">Explora la información sobre torneos deportivos, incluyendo tablas de posiciones y próximos partidos sin necesidad de iniciar sesión.</p>
-                    <a href="{{ route('admin.login') }}" class="inline-block px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg shadow-lg hover:bg-gray-100 transition duration-300">Administrador</a>
                 </div>
             @endguest
 
