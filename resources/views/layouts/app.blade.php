@@ -9,6 +9,7 @@
     <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         .navbar-custom {
             position: relative;
@@ -72,8 +73,7 @@
                 top: 100%;
                 left: 0;
                 width: 100%;
-                flex-direction: row;
-                flex-wrap: wrap;
+                flex-direction: column;
                 gap: 0;
                 background-color: #fff;
                 transform: translateY(-200%);
@@ -86,7 +86,7 @@
             }
 
             .navbar-custom nav ul li {
-                flex: 1 1 50%;
+                flex: 1;
                 text-align: center;
             }
 
@@ -120,14 +120,19 @@
             <nav class="menu">
                 <ul>
                     <li><a href="{{ route('home') }}"><i class="bi bi-house-door-fill"></i> Inicio</a></li>
-                   <!-- Public <li><a href="{{ route('torneos.index') }}"><i class="bi bi-calendar"></i> Torneos</a></li>--> 
-                    <li><a href="{{ route('admin.torneos.index') }}"><i class="bi bi-calendar"></i> Torneos</a></li>
+                    <li><a href="{{ route('torneos.index') }}"><i class="bi bi-calendar"></i> Torneos</a></li>
+                    <!-- Link to admin tournaments should only be visible to admins -->
+                    @auth
+                        @if(auth()->user()->is_admin) <!-- Assuming there's an is_admin method or attribute -->
+                            <li><a href="{{ route('admin.torneos.index') }}"><i class="bi bi-calendar"></i> Torneos Admin</a></li>
+                        @endif
+                    @endauth
                     <li><a href="#"><i class="bi bi-people-fill"></i> Equipos</a></li>
                     <li><a href="#"><i class="bi bi-list"></i> Clasificación</a></li>
                     <li><a href="#"><i class="bi bi-star-fill"></i> Goleadores</a></li>
                     <li><a href="#"><i class="bi bi-image"></i> Fotos y Videos</a></li>
-                    <li><a href="#"><i class="bi bi-gear-fill"></i> Configuración</a></li>
                     @auth
+                        <li><a href="#"><i class="bi bi-gear-fill"></i> Configuración</a></li>
                         <li><a href="{{ route('admin.dashboard') }}"><i class="bi bi-lock-fill"></i> Administrador</a></li>
                         <li><a href="{{ route('logout') }}" class="text-danger"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
                     @endauth

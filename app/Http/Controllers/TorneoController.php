@@ -9,26 +9,27 @@ class TorneoController extends Controller
 {
     // En tu controlador, por ejemplo, TorneoController.php
 // En tu controlador, por ejemplo, TorneoController.php
-    public function index(Request $request)
-    {
-        $query = Torneo::query();
+public function index(Request $request)
+{
+    $query = Torneo::query();
 
-        if ($request->has('search') && $request->search != '') {
-            $search = $request->input('search');
-            $query->where('nombre', 'like', "%{$search}%");
-        }
-
-        $torneos = $query->paginate(5);
-
-        if ($request->ajax()) {
-            return response()->json([
-                'html' => view('admin.torneos.partials.torneos_list', compact('torneos'))->render(),
-                'pagination' => view('pagination::tailwind', ['paginator' => $torneos])->render()
-            ]);
-        }
-
-        return view('admin.torneos.index', compact('torneos'));
+    if ($request->has('search') && $request->search != '') {
+        $search = $request->input('search');
+        $query->where('nombre', 'like', "%{$search}%");
     }
+
+    $torneos = $query->paginate(5);
+
+    if ($request->ajax()) {
+        return response()->json([
+            'html' => view('admin.torneos.partials.torneos_list', compact('torneos'))->render(),
+            'pagination' => view('pagination::tailwind', ['paginator' => $torneos])->render()
+        ]);
+    }
+
+    return view('admin.torneos.index', compact('torneos'));
+}
+
 
 
 
