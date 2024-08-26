@@ -22,4 +22,14 @@ class Torneo extends Model
     {
         return $this->hasMany(Partido::class);
     }
+    public function goleadores()
+{
+    return $this->hasMany(Goleador::class);
+}
+
+    public function galeria()
+    {
+        return $this->hasMany(Galeria::class, 'torneo_id');
+    }
+
 }

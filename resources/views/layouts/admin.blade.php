@@ -3,17 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'UNISCORE')</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         .navbar-custom {
             position: relative;
@@ -77,8 +73,7 @@
                 top: 100%;
                 left: 0;
                 width: 100%;
-                flex-direction: row;
-                flex-wrap: wrap;
+                flex-direction: column;
                 gap: 0;
                 background-color: #fff;
                 transform: translateY(-200%);
@@ -91,7 +86,7 @@
             }
 
             .navbar-custom nav ul li {
-                flex: 1 1 50%;
+                flex: 1;
                 text-align: center;
             }
 
@@ -114,22 +109,39 @@
 </head>
 <body class="bg-gray-100">
     <!-- Header -->
-    <header class="container mx-auto p-4">
-        <div class="d-flex justify-content-between align-items-center">
-            <h1>Panel de Administración</h1>
-            <nav class="d-flex">
-                <ul class="d-flex gap-3 mb-0">
+    <header class="bg-white shadow-sm mb-4">
+        <div class="container mx-auto p-4 navbar-custom">
+            <h1 class="text-3xl font-bold">UNISCORE</h1>
+            <div class="menu-toggle">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <nav class="menu">
+                <ul>
                     <li><a href="{{ route('home') }}"><i class="bi bi-house-door-fill"></i> Inicio</a></li>
-                    <!-- Uncomment if you need public access to Torneos -->
-                    <!-- <li><a href="{{ route('torneos.index') }}"><i class="bi bi-calendar"></i> Torneos</a></li> -->
-                    <li><a href="{{ route('admin.torneos.index') }}"><i class="bi bi-calendar"></i> Torneos</a></li>
-                    <li><a href="#"><i class="bi bi-people-fill"></i> Equipos</a></li>
-                    <li><a href="#"><i class="bi bi-list"></i> Clasificación</a></li>
-                    <li><a href="#"><i class="bi bi-star-fill"></i> Goleadores</a></li>
-                    <li><a href="#"><i class="bi bi-image"></i> Fotos y Videos</a></li>
-                    <li><a href="#"><i class="bi bi-gear-fill"></i> Configuración</a></li>
+                    <li><a href="{{ route('torneos.index') }}"><i class="bi bi-calendar"></i> Torneos</a></li>
+                    @auth<li><a href="{{ route('admin.torneos.index') }}"><i class="bi bi-calendar"></i> Torneos Admin</a></li>@endauth
+
+                    @auth
+                        @if(auth()->user()->is_admin)
+                        <li><a href="{{ route('admin.dashboard') }}"><i class="bi bi-lock-fill"></i> Administrador</a></li>
+                        @endif
+                    @endauth
+                    <li><a href="{{ route('equipos', ['id' => $torneo->id ?? 1]) }}"><i class="bi bi-people-fill"></i> Equipos</a></li>
+                    <li><a href="{{ route('clasificacion', ['id' => $torneo->id ?? 1]) }}"><i class="bi bi-list"></i> Clasificación</a></li>
+                    <li><a href="{{ route('goleadores', ['id' => $torneo->id ?? 1]) }}"><i class="bi bi-star-fill"></i> Goleadores</a></li>
+                    <li><a href="{{ route('galeria', ['id' => $torneo->id ?? 1]) }}"><i class="bi bi-image"></i> Fotos y Videos</a></li>
+                    @auth
+                        <li><a href="#"><i class="bi bi-gear-fill"></i> Configuración</a></li>
+                        <li><a href="{{ route('logout') }}" class="text-danger"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
+                    @endauth
+                    @guest
+                        <li><a href="{{ route('login.show') }}" class="btn btn-primary"><i class="bi bi-person-fill"></i> Iniciar Sesión</a></li>
+                    @endguest
                 </ul>
             </nav>
+            
         </div>
     </header>
 
@@ -139,12 +151,21 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer mt-4 py-4">
-        <p class="text-center mb-0">&copy; 2024 UNISCORE. Todos los derechos reservados.</p>
+    <footer class="bg-dark text-white mt-4 py-4">
+        <div class="container text-center">
+            <p>&copy; 2024 UNISCORE. Todos los derechos reservados.</p>
+        </div>
     </footer>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script>
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('nav ul').classList.toggle('show-menu');
+        });
+    </script>
 </body>
 </html>

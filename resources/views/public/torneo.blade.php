@@ -89,36 +89,48 @@
             @endif
         </div>
     </section>
+
+    <!-- Botón flotante para crear torneo -->
+    <a href="{{ route('admin.torneos.create') }}" class="fixed bottom-4 right-4 bg-green-600 text-white p-4 rounded-full shadow-lg hover:bg-green-700 transition-colors duration-300">
+        <i class="fas fa-plus text-2xl"></i>
+        <span class="sr-only">Crear Torneo</span>
+    </a>
+
+    <!-- Botón flotante para configurar torneos -->
+    <a href="{{ route('admin.torneos.index') }}" class="fixed bottom-16 right-4 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors duration-300">
+        <i class="fas fa-cog text-2xl"></i>
+        <span class="sr-only">Configurar Torneos</span>
+    </a>
+
+    <script>
+        document.getElementById('filter-nombre').addEventListener('input', applyFilters);
+        document.getElementById('filter-tipo').addEventListener('change', applyFilters);
+        document.getElementById('filter-genero').addEventListener('change', applyFilters);
+        document.getElementById('filter-estado').addEventListener('change', applyFilters);
+
+        function applyFilters() {
+            const nombreFilter = document.getElementById('filter-nombre').value.toLowerCase();
+            const tipoFilter = document.getElementById('filter-tipo').value.toLowerCase();
+            const generoFilter = document.getElementById('filter-genero').value.toLowerCase();
+            const estadoFilter = document.getElementById('filter-estado').value.toLowerCase();
+
+            document.querySelectorAll('.tournament-card').forEach(card => {
+                const nombre = card.getAttribute('data-nombre').toLowerCase();
+                const tipo = card.getAttribute('data-tipo').toLowerCase();
+                const genero = card.getAttribute('data-genero').toLowerCase();
+                const estado = card.getAttribute('data-estado').toLowerCase();
+
+                // Aplica el filtro si los valores coinciden o están vacíos (sin filtro)
+                if ((nombreFilter === '' || nombre.includes(nombreFilter)) &&
+                    (tipoFilter === '' || tipo === tipoFilter) &&
+                    (generoFilter === '' || genero === generoFilter) &&
+                    (estadoFilter === '' || estado === estadoFilter)) {
+                    card.style.display = ''; // Muestra la tarjeta si cumple con los filtros
+                } else {
+                    card.style.display = 'none'; // Oculta la tarjeta si no cumple
+                }
+            });
+        }
+    </script>
 </main>
-
-<script>
-    document.getElementById('filter-nombre').addEventListener('input', applyFilters);
-    document.getElementById('filter-tipo').addEventListener('change', applyFilters);
-    document.getElementById('filter-genero').addEventListener('change', applyFilters);
-    document.getElementById('filter-estado').addEventListener('change', applyFilters);
-
-    function applyFilters() {
-        const nombreFilter = document.getElementById('filter-nombre').value.toLowerCase();
-        const tipoFilter = document.getElementById('filter-tipo').value.toLowerCase();
-        const generoFilter = document.getElementById('filter-genero').value.toLowerCase();
-        const estadoFilter = document.getElementById('filter-estado').value.toLowerCase();
-
-        document.querySelectorAll('.tournament-card').forEach(card => {
-            const nombre = card.getAttribute('data-nombre').toLowerCase();
-            const tipo = card.getAttribute('data-tipo').toLowerCase();
-            const genero = card.getAttribute('data-genero').toLowerCase();
-            const estado = card.getAttribute('data-estado').toLowerCase();
-
-            // Aplica el filtro si los valores coinciden o están vacíos (sin filtro)
-            if ((nombreFilter === '' || nombre.includes(nombreFilter)) &&
-                (tipoFilter === '' || tipo === tipoFilter) &&
-                (generoFilter === '' || genero === generoFilter) &&
-                (estadoFilter === '' || estado === estadoFilter)) {
-                card.style.display = ''; // Muestra la tarjeta si cumple con los filtros
-            } else {
-                card.style.display = 'none'; // Oculta la tarjeta si no cumple
-            }
-        });
-    }
-</script>
 @endsection

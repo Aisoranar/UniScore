@@ -8,18 +8,24 @@ class CreateTorneosTable extends Migration
 {
     public function up()
     {
-        Schema::create('torneos', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombre');
-            $table->enum('tipo', ['todos_contra_todos', 'grupos', 'eliminatorias_grupos']);
-            $table->enum('genero', ['masculino', 'femenino', 'mixto']);
-            $table->enum('estado', ['activo', 'finalizado']);
-            $table->timestamps();
-        });
+        // Verificar si la tabla no existe antes de crearla
+        if (!Schema::hasTable('torneos')) {
+            Schema::create('torneos', function (Blueprint $table) {
+                $table->id();
+                $table->string('nombre');
+                $table->enum('tipo', ['todos_contra_todos', 'grupos', 'eliminatorias_grupos']);
+                $table->enum('genero', ['masculino', 'femenino', 'mixto']);
+                $table->enum('estado', ['activo', 'finalizado']);
+                $table->timestamps();
+            });
+        }
     }
 
     public function down()
     {
-        Schema::dropIfExists('torneos');
+        // No eliminar si la tabla no existe
+        if (Schema::hasTable('torneos')) {
+            Schema::dropIfExists('torneos');
+        }
     }
 }
