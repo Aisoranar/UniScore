@@ -30,15 +30,43 @@ public function index(Request $request)
     return view('admin.torneos.index', compact('torneos'));
 }
 
-public function publicIndex()
+public function publicIndex(Request $request)
     {
-        $torneos = Torneo::where('estado', 'activo')->get(); // Obtén solo los torneos activos
+        // Obtén los valores de los filtros desde la solicitud
+        $nombre = $request->input('nombre');
+        $tipo = $request->input('tipo_torneo');
+        $genero = $request->input('genero');
+        $estado = $request->input('estado');
+
+        // Consulta básica para obtener los torneos activos
+        $query = Torneo::query();
+
+        // Aplicar los filtros si están presentes
+        if ($nombre) {
+            $query->where('nombre', 'like', '%' . $nombre . '%');
+        }
+
+        if ($tipo) {
+            $query->where('tipo', $tipo);
+        }
+
+        if ($genero) {
+            $query->where('genero', $genero);
+        }
+
+        if ($estado) {
+            $query->where('estado', $estado);
+        } else {
+            // Filtrar por defecto por estado 'activo' si no se aplica ningún filtro de estado
+            $query->where('estado', 'activo');
+        }
+
+        // Paginación de resultados
+        $torneos = $query->paginate(6);
+
+        // Retornar la vista con los resultados filtrados
         return view('public.torneo', compact('torneos'));
     }
-
-
-
-
 
 
     public function create()
