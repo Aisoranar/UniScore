@@ -121,9 +121,8 @@
                 <ul>
                     <li><a href="{{ route('home') }}"><i class="bi bi-house-door-fill"></i> Inicio</a></li>
                     <li><a href="{{ route('torneos.index') }}"><i class="bi bi-calendar"></i> Torneos</a></li>
-                    <!-- Link to admin tournaments should only be visible to admins -->
                     @auth
-                        @if(auth()->user()->is_admin) <!-- Assuming there's an is_admin method or attribute -->
+                        @if(auth()->user()->is_admin)
                             <li><a href="{{ route('admin.torneos.index') }}"><i class="bi bi-calendar"></i> Torneos Admin</a></li>
                         @endif
                     @endauth

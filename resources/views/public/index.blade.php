@@ -54,9 +54,10 @@
             <p class="text-center text-gray-600 mt-6">No hay torneos disponibles en este momento.</p>
         @endif
     </div>
-
     
 </section>
+
+
 
 
 

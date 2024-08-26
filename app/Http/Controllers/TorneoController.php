@@ -30,6 +30,13 @@ public function index(Request $request)
     return view('admin.torneos.index', compact('torneos'));
 }
 
+public function publicIndex()
+    {
+        $torneos = Torneo::where('estado', 'activo')->get(); // Obtén solo los torneos activos
+        return view('public.torneo', compact('torneos'));
+    }
+
+
 
 
 

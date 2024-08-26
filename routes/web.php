@@ -18,8 +18,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Ruta principal (página de bienvenida)
-Route::get('/', [PublicController::class, 'home'])->name('home');
+// Ruta principal (página de torneos)
+Route::get('/', [PublicController::class, 'index'])->name('home');
 
 // Rutas de Registro de Usuarios
 Route::get('/register', [RegisterController::class, 'show'])->name('register.show');
@@ -30,13 +30,15 @@ Route::get('/login', [LoginController::class, 'show'])->name('login.show');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 
 // Ruta de Inicio después del Login
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home.dashboard');
 
 // Ruta de Logout para cerrar sesión
 Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 // Rutas Públicas para ver los torneos y detalles
-Route::get('/torneos', [PublicController::class, 'index'])->name('torneos.index');
+Route::get('/torneos', [TorneoController::class, 'publicIndex'])->name('torneos.index');
+Route::get('/torneos/{id}', [TorneoController::class, 'showPublic'])->name('torneos.show');
+
 Route::get('/torneos/{id}', [PublicController::class, 'showTorneo'])->name('torneos.show');
 Route::get('/clasificacion/{id}', [PublicController::class, 'clasificacion'])->name('clasificacion');
 Route::get('/partidos/{id}', [PublicController::class, 'proximosPartidos'])->name('partidos');

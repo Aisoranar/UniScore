@@ -17,6 +17,13 @@ class PublicController extends Controller
         $torneos = Torneo::where('estado', 'activo')->get();
         return view('public.index', compact('torneos'));
     }
+    public function torneos()
+{
+    $torneos = Torneo::all(); // Obtén todos los torneos
+    return view('public.torneo', compact('torneos'));
+}
+
+
 
     public function showTorneo($id)
     {
