@@ -4,16 +4,15 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJugadoresTable extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up()
+    public function up(): void
     {
         Schema::create('jugadores', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
+            $table->integer('edad');
+            $table->string('posicion');
             $table->foreignId('equipo_id')->constrained()->onDelete('cascade');
             $table->integer('tarjetas_amarillas')->default(0);
             $table->integer('tarjetas_rojas')->default(0);
@@ -22,11 +21,8 @@ class CreateJugadoresTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('jugadores');
     }
-}
+};

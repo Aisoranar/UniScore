@@ -9,16 +9,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            TorneoSeeder::class,
             EquipoSeeder::class,
             JugadorSeeder::class,
-            PartidoSeeder::class,
-            GaleriaSeeder::class,
-            UserSeeder::class,
             GoleadorSeeder::class,
-            AnotherTorneoSeeder::class,
-            AnotherEquipoSeeder::class,
-            AnotherJugadorSeeder::class,
+            TorneoSeeder::class,
+            PartidoSeeder::class,
         ]);
     }
 }

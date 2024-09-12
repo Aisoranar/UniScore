@@ -2,18 +2,20 @@
 
 namespace Database\Seeders;
 
+use App\Models\Equipo;
+use App\Models\Torneo;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class EquipoSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('equipos')->insert([
-            ['nombre' => 'Equipo 1', 'torneo_id' => 1, 'puntos' => 10],
-            ['nombre' => 'Equipo 2', 'torneo_id' => 1, 'puntos' => 8],
-            ['nombre' => 'Equipo 3', 'torneo_id' => 2, 'puntos' => 6],
-            ['nombre' => 'Equipo 4', 'torneo_id' => 2, 'puntos' => 12],
+        // Creamos algunos torneos
+        $torneos = Torneo::factory(5)->create();
+
+        // Creamos equipos y les asignamos un torneo aleatorio
+        Equipo::factory(10)->create([
+            'torneo_id' => $torneos->random()->id, // Asignar torneo aleatorio a cada equipo
         ]);
     }
 }

@@ -1,14 +1,12 @@
 <?php
 
-// database/migrations/xxxx_xx_xx_create_partidos_table.php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePartidosTable extends Migration
+return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::create('partidos', function (Blueprint $table) {
             $table->id();
@@ -18,13 +16,15 @@ class CreatePartidosTable extends Migration
             $table->date('fecha');
             $table->time('hora');
             $table->string('ubicacion');
+            $table->integer('goles_local')->nullable();  // Goles local
+            $table->integer('goles_visitante')->nullable();  // Goles visitante
             $table->string('resultado')->nullable();
             $table->timestamps();
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('partidos');
     }
-}
+};
