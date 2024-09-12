@@ -90,11 +90,13 @@ class PublicController extends Controller
 
     public function goleadores()
     {
-        $goleadores = Goleador::with('jugador')
+        $goleadores = Goleador::with(['jugador', 'jugador.equipo']) // Incluimos la relación con el equipo
                               ->orderBy('goles', 'desc')
                               ->paginate(10);
+    
         return view('public.goleadores', compact('goleadores'));
     }
+    
 
     public function galeria()
     {
