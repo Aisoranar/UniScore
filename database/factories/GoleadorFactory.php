@@ -12,8 +12,9 @@ class GoleadorFactory extends Factory
     public function definition()
     {
         return [
-            'jugador_id' => null, // Lo asignaremos después
-            'goles' => $this->faker->numberBetween(1, 50),
+            'jugador_id' => \App\Models\Jugador::factory(), // Relación con un jugador
+            'goles' => $this->faker->numberBetween(5, 50),
+            'torneo_id' => \App\Models\Torneo::factory(),  // Relación con un torneo
         ];
     }
 }

@@ -2,19 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Models\Goleador;
-use App\Models\Jugador;
 use Illuminate\Database\Seeder;
+use App\Models\Goleador;
 
 class GoleadorSeeder extends Seeder
 {
     public function run()
     {
-        // Creamos goleadores para los jugadores
-        Jugador::all()->each(function ($jugador) {
-            Goleador::factory()->create([
-                'jugador_id' => $jugador->id,
-            ]);
-        });
+        // Generar 10 goleadores con la factory
+        Goleador::factory(10)->create();
     }
 }

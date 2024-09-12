@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Goleador extends Model
 {
+    use HasFactory;
     protected $fillable = ['jugador_id', 'torneo_id', 'goles'];
 
     public function torneo()
