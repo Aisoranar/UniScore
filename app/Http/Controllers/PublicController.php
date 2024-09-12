@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Equipo; // Importar el modelo de Equipo
+use App\Models\Goleador; // Importar el modelo de Goleador
 use App\Models\Torneo;
 use Illuminate\Http\Request;
 
@@ -13,18 +15,17 @@ class PublicController extends Controller
     }
 
     public function index()
-{
-    // Utiliza paginate en lugar de get() o all()
-    $torneos = Torneo::where('estado', 'activo')->paginate(10); // Pagina 10 torneos por página
-    return view('public.index', compact('torneos'));
-}
+    {
+        // Paginación de torneos activos
+        $torneos = Torneo::where('estado', 'activo')->paginate(10);
+        return view('public.index', compact('torneos'));
+    }
 
-public function torneos()
-{
-    $torneos = Torneo::paginate(10); // Pagina 10 torneos por página
-    return view('public.torneo', compact('torneos'));
-}
-
+    public function torneos()
+    {
+        $torneos = Torneo::paginate(10); // Paginación de torneos
+        return view('public.torneo', compact('torneos'));
+    }
 
     public function showTorneo($id)
     {
@@ -32,43 +33,34 @@ public function torneos()
         return view('public.torneo', compact('torneo'));
     }
 
-    public function clasificacion($id)
+    // Mostrar clasificación de todos los equipos con paginación
+    public function clasificacion()
     {
-        $torneo = Torneo::findOrFail($id);
-        $clasificacion = $torneo->equipos()->orderBy('puntos', 'desc')->get();
-        return view('public.clasificacion', compact('torneo', 'clasificacion'));
+        $clasificacion = Equipo::orderBy('puntos', 'desc')->paginate(10); // Paginación de clasificación
+        return view('public.clasificacion', compact('clasificacion'));
     }
 
-    public function proximosPartidos($id)
+    // Mostrar todos los equipos con paginación
+    public function equipos()
     {
-        $torneo = Torneo::findOrFail($id);
-        $partidos = $torneo->partidos()->where('fecha', '>=', now())->get();
-        return view('public.partidos', compact('torneo', 'partidos'));
+        // Paginar 10 equipos por página
+        $equipos = Equipo::with('jugadores')->paginate(10);
+        return view('public.equipos', compact('equipos'));
     }
 
-    // Nueva función para mostrar los equipos
-    public function equipos($id)
+    // Mostrar todos los goleadores con paginación
+    public function goleadores()
     {
-        $torneo = Torneo::findOrFail($id);
-        $equipos = $torneo->equipos;
-        return view('public.equipos', compact('torneo', 'equipos'));
+        $goleadores = Goleador::with('jugador') // Relación jugador
+                               ->orderBy('goles', 'desc')
+                               ->paginate(10); // Paginación de goleadores
+        return view('public.goleadores', compact('goleadores'));
     }
 
-    // Nueva función para mostrar los goleadores
-    public function goleadores($id)
-{
-    $torneo = Torneo::findOrFail($id);
-    $goleadores = $torneo->goleadores()->orderBy('goles', 'desc')->get();
-    return view('public.goleadores', compact('torneo', 'goleadores'));
-}
-
-
-
-    // Nueva función para mostrar fotos y videos
-    public function galeria($id)
+    // Mostrar galería de fotos y videos con paginación
+    public function galeria()
     {
-        $torneo = Torneo::findOrFail($id);
-        $galeria = $torneo->galeria; // Asegúrate de que esta relación esté definida en el modelo Torneo
-        return view('public.galeria', compact('torneo', 'galeria'));
+        $galerias = Torneo::with('galeria')->paginate(10); // Paginación de galería
+        return view('public.galeria', compact('galerias'));
     }
 }

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Clasificación del Torneo')
+@section('title', 'Clasificación General')
 
 @section('content')
     <div class="container mx-auto my-8 p-6 bg-gray-100 shadow-lg rounded-lg">
-        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Clasificación - {{ $torneo->nombre }}</h1>
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Clasificación General</h1>
 
         <div class="overflow-x-auto">
             <table class="min-w-full bg-white rounded-lg shadow-md">

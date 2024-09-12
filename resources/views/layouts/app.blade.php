@@ -128,10 +128,10 @@
                         <li><a href="{{ route('admin.dashboard') }}"><i class="bi bi-lock-fill"></i> Administrador</a></li>
                         @endif
                     @endauth
-                    <li><a href="{{ route('equipos', ['id' => $torneo->id ?? 1]) }}"><i class="bi bi-people-fill"></i> Equipos</a></li>
-                    <li><a href="{{ route('clasificacion', ['id' => $torneo->id ?? 1]) }}"><i class="bi bi-list"></i> Clasificación</a></li>
-                    <li><a href="{{ route('goleadores', ['id' => $torneo->id ?? 1]) }}"><i class="bi bi-star-fill"></i> Goleadores</a></li>
-                    <li><a href="{{ route('galeria', ['id' => $torneo->id ?? 1]) }}"><i class="bi bi-image"></i> Fotos y Videos</a></li>
+                    <li><a href="{{ route('equipos') }}"><i class="bi bi-people-fill"></i> Equipos</a></li>
+                    <li><a href="{{ route('clasificacion') }}"><i class="bi bi-list"></i> Clasificación</a></li>
+                    <li><a href="{{ route('goleadores') }}"><i class="bi bi-star-fill"></i> Goleadores</a></li>
+                    <li><a href="{{ route('galeria') }}"><i class="bi bi-image"></i> Fotos y Videos</a></li>
                     @auth
                         <li><a href="#"><i class="bi bi-gear-fill"></i> Configuración</a></li>
                         <li><a href="{{ route('logout') }}" class="text-danger"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
@@ -141,7 +141,6 @@
                     @endguest
                 </ul>
             </nav>
-            
         </div>
     </header>
 
@@ -164,7 +163,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <script>
         document.querySelector('.menu-toggle').addEventListener('click', function() {
-            document.querySelector('nav ul').classList.toggle('show-menu');
+            document.querySelector
+('nav ul').classList.toggle('show-menu');
         });
     </script>
 </body>

@@ -41,19 +41,21 @@ Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
 // Rutas Públicas para ver los torneos y detalles
 Route::get('/torneos', [PublicController::class, 'torneos'])->name('torneos.index');
 Route::get('/torneos/{id}', [PublicController::class, 'showTorneo'])->name('torneos.show');
-Route::get('/clasificacion/{id}', [PublicController::class, 'clasificacion'])->name('clasificacion');
-Route::get('/partidos/{id}', [PublicController::class, 'proximosPartidos'])->name('partidos');
 
-// Ruta para la galería
-Route::get('/torneo/{id}/galeria', [GaleriaController::class, 'show'])->name('galeria.show');
+// Ruta para la clasificación de equipos con paginación
+Route::get('/clasificacion', [PublicController::class, 'clasificacion'])->name('clasificacion');
 
-// Nuevas rutas para equipos y goleadores
-Route::get('/equipos/{id}', [PublicController::class, 'equipos'])->name('equipos');
-Route::get('/goleadores/{id}', [PublicController::class, 'goleadores'])->name('goleadores');
-Route::get('/galeria/{id}', [PublicController::class, 'galeria'])->name('galeria');
+// Ruta para ver los próximos partidos
+Route::get('/partidos', [PublicController::class, 'proximosPartidos'])->name('partidos');
 
-// Ruta para mostrar los goleadores de un torneo específico
-Route::get('/torneos/{torneoId}/goleadores', [GoleadorController::class, 'showGoleadores'])->name('goleadores.show');
+// Ruta para la galería de fotos y videos con paginación
+Route::get('/galeria', [PublicController::class, 'galeria'])->name('galeria');
+
+// Ruta para mostrar todos los equipos con paginación
+Route::get('/equipos', [PublicController::class, 'equipos'])->name('equipos');
+
+// Ruta para mostrar los goleadores con paginación
+Route::get('/goleadores', [PublicController::class, 'goleadores'])->name('goleadores');
 
 // Rutas de Administración protegidas por autenticación
 Route::middleware('auth')->group(function () {
@@ -96,4 +98,3 @@ Route::middleware('auth')->group(function () {
 Route::get('/admin/login', [AdminController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login.submit');
 Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
-

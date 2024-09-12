@@ -3,6 +3,16 @@
 @section('content')
     <div class="container mx-auto p-6">
         <h1 class="text-4xl font-extrabold mb-6 text-gray-900">Administrar Torneos</h1>
+
+        <div class="flex justify-between my-4">
+            <a href="{{ url('/admin/torneos/1/equipos') }}" class="inline-flex items-center py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-700">
+                Ver Equipos
+            </a>
+            <a href="{{ url('/admin/torneos/1/equipos/create') }}" class="inline-flex items-center py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-700">
+                Crear Equipo
+            </a>
+        </div>
+        
         
         <!-- Formulario de búsqueda -->
         <div class="flex items-center mb-6 space-x-4">

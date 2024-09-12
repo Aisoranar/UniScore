@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Goleadores del Torneo')
+@section('title', 'Goleadores')
 
 @section('content')
     <div class="container mx-auto my-8 p-6 bg-gray-100 shadow-lg rounded-lg">
-        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Goleadores del Torneo - {{ $torneo->nombre ?? 'Torneo no disponible' }}</h1>
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Goleadores</h1>
 
         <div class="overflow-x-auto">
             <table class="min-w-full bg-white rounded-lg shadow-md">
@@ -32,6 +32,11 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+
+        <!-- Pagination Links -->
+        <div class="mt-8">
+            {{ $goleadores->links() }}
         </div>
     </div>
 @endsection

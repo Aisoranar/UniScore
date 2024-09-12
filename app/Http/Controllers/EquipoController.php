@@ -9,13 +9,12 @@ use Illuminate\Http\Request;
 class EquipoController extends Controller
 {
     public function index($torneoId)
-{
-    $torneo = Torneo::findOrFail($torneoId);
-    $equipos = $torneo->equipos()->with('jugadores')->get(); // Cargar jugadores de cada equipo
+    {
+        $torneo = Torneo::findOrFail($torneoId);
+        $equipos = $torneo->equipos()->with('jugadores')->paginate(10); // Paginación
 
-    return view('admin.equipos.index', compact('torneo', 'equipos'));
-}
-
+        return view('admin.equipos.index', compact('torneo', 'equipos'));
+    }
 
     public function create($torneoId)
     {
@@ -48,7 +47,6 @@ class EquipoController extends Controller
     public function show($id)
     {
         $equipo = Equipo::findOrFail($id);
-
         return view('admin.equipos.show', compact('equipo'));
     }
 

@@ -5,7 +5,7 @@
 @section('content')
     <div class="container mx-auto my-6 p-4 bg-white shadow-md rounded-lg">
         <h1 class="text-3xl font-bold mb-4">Crear Nuevo Equipo para el Torneo - {{ $torneo->nombre }}</h1>
-        <form action="{{ route('equipos.store', ['torneo' => $torneo->id]) }}" method="POST">
+        <form action="{{ route('admin.equipos.store', ['torneoId' => $torneo->id]) }}" method="POST">
             @csrf
             <div class="mb-4">
                 <label for="nombre" class="block text-lg font-medium text-gray-700">Nombre del Equipo</label>
