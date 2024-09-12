@@ -89,13 +89,20 @@ class PublicController extends Controller
     }
 
     public function goleadores()
-    {
-        $goleadores = Goleador::with(['jugador', 'jugador.equipo']) // Incluimos la relación con el equipo
-                              ->orderBy('goles', 'desc')
-                              ->paginate(10);
+{
+    $goleadores = Goleador::with(['jugador.equipo']) // Load the relationships
+        ->with(['jugador.equipo' => function($query) {
+            $query->withCount(['partidos as partidos_jugados' => function($query) {
+                $query->whereNotNull('resultado'); // Count only matches with a result
+            }]);
+        }])
+        ->orderBy('goles', 'desc')
+        ->paginate(10);
+
+    return view('public.goleadores', compact('goleadores'));
+}
+
     
-        return view('public.goleadores', compact('goleadores'));
-    }
     
 
     public function galeria()

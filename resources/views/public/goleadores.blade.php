@@ -40,6 +40,8 @@
                             <td class="px-6 py-4 text-right text-lg text-gray-700">
                                 {{ $goleador->jugador && $goleador->jugador->equipo ? $goleador->jugador->equipo->partidos_jugados : 'N/A' }}
                             </td>
+                            
+                            
                         </tr>
                     @endforeach
                 </tbody>
