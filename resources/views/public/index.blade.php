@@ -28,7 +28,7 @@
         </div>
     </section>
 
-    <!-- Sección de Torneos Activos -->
+    <!-- Sección de Torneos Activos (Preview) -->
     <section class="tournaments-section py-12 bg-gray-200">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <h1 class="text-center text-3xl sm:text-4xl font-extrabold text-gray-800 mb-10">
@@ -36,8 +36,10 @@
             </h1>
 
             @if(isset($torneos) && $torneos->isNotEmpty())
+                <!-- Mostrar un número limitado de torneos como preview -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                    @foreach ($torneos as $torneo)
+                    @php $torneosLimitados = $torneos->take(3); @endphp
+                    @foreach ($torneosLimitados as $torneo)
                         <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                             <div class="text-3xl lg:text-4xl text-blue-500 mb-4">
                                 <i class="fas fa-certificate"></i>
@@ -47,6 +49,13 @@
                             <a href="{{ route('torneos.show', $torneo->id) }}" class="inline-block px-4 py-2 lg:px-5 lg:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300">Ver Torneo</a>
                         </div>
                     @endforeach
+                </div>
+
+                <!-- Botón para ver todos los torneos -->
+                <div class="text-center mt-8">
+                    <a href="{{ route('torneos.index') }}" class="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-700 transition-colors duration-300">
+                        Ver Todos los Torneos
+                    </a>
                 </div>
             @else
                 <p class="text-center text-gray-600 mt-6">No hay torneos disponibles en este momento.</p>
