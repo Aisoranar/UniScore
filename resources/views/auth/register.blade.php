@@ -1,52 +1,61 @@
 @extends('layouts.auth-master')
 
+@section('title', 'Crear Cuenta')
+
 @section('content')
+<div class="text-center mb-8">
+    <h1 class="text-4xl font-bold text-blue-700 animate-pulse">Crear Cuenta</h1>
+</div>
+<form action="{{ route('register.post') }}" method="POST" class="space-y-6">
+    @csrf
+    @include('layouts.partials.message')
 
-    <form action="{{ route('register.post') }}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        @csrf
-        <h1 class="text-center text-2xl font-bold mb-6">Crear Cuenta</h1>
-        @include('layouts.partials.message')
+    <!-- Cedula con Label Flotante -->
+    <div class="floating-label mb-6">
+        <input type="text" name="cedula" id="cedulaInput" placeholder=" " class="peer" required>
+        <label for="cedulaInput">Ingrese su cédula</label>
+    </div>
 
-        <div class="form-group mb-4">
-            <label for="cedulaInput" class="form-label">Cédula</label>
-            <input type="text" name="cedula" class="form-control" id="cedulaInput" placeholder="Cédula" required>
-        </div>
+    <!-- Correo con Label Flotante -->
+    <div class="floating-label mb-6">
+        <input type="email" name="email" id="emailInput" placeholder=" " class="peer" required>
+        <label for="emailInput">Correo electrónico</label>
+    </div>
 
-        <div class="form-group mb-4">
-            <label for="emailInput" class="form-label">Correo electrónico</label>
-            <input type="email" name="email" class="form-control" id="emailInput" placeholder="Correo electrónico" required>
-        </div>
+    <!-- Nombre de usuario con Label Flotante -->
+    <div class="floating-label mb-6">
+        <input type="text" name="username" id="usernameInput" placeholder=" " class="peer" required>
+        <label for="usernameInput">Nombre de usuario</label>
+    </div>
 
-        <div class="form-group mb-4">
-            <label for="usernameInput" class="form-label">Nombre de usuario</label>
-            <input type="text" name="username" class="form-control" id="usernameInput" placeholder="Nombre de usuario" required>
-        </div>
+    <!-- Tipo de Usuario con Label Flotante -->
+    <div class="floating-label mb-6">
+        <select name="role" id="roleSelect" class="peer" required>
+            <option value="user">Usuario</option>
+            <option value="admin">Administrador</option>
+        </select>
+        <label for="roleSelect">Tipo de Usuario</label>
+    </div>
 
-        <div class="form-group mb-4">
-            <label for="roleSelect" class="form-label">Tipo de Usuario</label>
-            <select name="role" id="roleSelect" class="form-control" required>
-                <option value="user">Usuario</option>
-                <option value="admin">Administrador</option>
-            </select>
-        </div>
+    <!-- Contraseña con Label Flotante -->
+    <div class="floating-label mb-6">
+        <input type="password" name="password" id="passwordInput" placeholder=" " class="peer" required>
+        <label for="passwordInput">Contraseña</label>
+    </div>
 
-        <div class="form-group mb-4">
-            <label for="passwordInput" class="form-label">Contraseña</label>
-            <input type="password" name="password" class="form-control" id="passwordInput" placeholder="Contraseña" required>
-        </div>
+    <!-- Confirmar Contraseña con Label Flotante -->
+    <div class="floating-label mb-6">
+        <input type="password" name="password_confirmation" id="passwordConfirmationInput" placeholder=" " class="peer" required>
+        <label for="passwordConfirmationInput">Confirmar contraseña</label>
+    </div>
 
-        <div class="form-group mb-4">
-            <label for="passwordConfirmationInput" class="form-label">Confirmar contraseña</label>
-            <input type="password" name="password_confirmation" class="form-control" id="passwordConfirmationInput" placeholder="Confirma tu contraseña" required>
-        </div>
+    <!-- Botón de Enviar -->
+    <button type="submit" class="btn-primary">
+        Crear Cuenta
+    </button>
 
-        <div class="mb-4">
-            <button type="submit" class="btn btn-primary w-100">Crear cuenta</button>
-        </div>
-
-        <div class="text-center">
-            <p>¿Ya tienes cuenta? <a href="{{ route('login.show') }}">Iniciar Sesión</a></p>
-        </div>
-    </form>
-
+    <div class="text-center text-sm text-gray-600 mt-4">
+        <p>¿Ya tienes cuenta? <a href="{{ route('login.show') }}" class="text-blue-600 hover:underline font-medium">Iniciar Sesión</a></p>
+    </div>
+</form>
 @endsection
