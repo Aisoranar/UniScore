@@ -95,7 +95,7 @@
         }
 
         /* Mobile-first: Ajustes para pantallas pequeñas */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .navbar-custom .menu-toggle {
                 display: flex;
             }
@@ -137,7 +137,7 @@
         }
 
         /* Ajustes para pantallas grandes */
-        @media (min-width: 769px) {
+        @media (min-width: 1025px) {
             .navbar-custom nav ul {
                 flex-direction: row;
             }
@@ -156,7 +156,7 @@
                 <div></div>
             </div>
             <nav class="menu">
-                <ul>
+                <ul class="flex flex-col lg:flex-row items-start lg:items-center">
                     <li><a href="{{ route('home') }}"><i class="bi bi-house-door-fill"></i> Inicio</a></li>
                     <li><a href="{{ route('torneos.index') }}"><i class="bi bi-calendar"></i> Torneos</a></li>
                     @auth
@@ -187,17 +187,16 @@
     </main>
 
     <!-- Footer -->
-    < <!-- Footer -->
-<footer style="background-color: #343a40; color: #ffffff; margin-top: 1rem; padding-top: 1rem; padding-bottom: 1rem;">
-    <div style="text-align: center;">
-        <p style="margin-bottom: 0;">&copy; 2024 UNISCORE. Todos los derechos reservados.</p>
-        <p style="margin-bottom: 0;">
-            Diseñado por: 
-            <a href="https://www.linkedin.com/in/aisoranar/" target="_blank" 
-               style="color: #f8f9fa; text-decoration: none; font-weight: bold; 
-                      transition: color 0.3s ease, text-shadow 0.3s ease; 
-                      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);">
-                Aisor Anaya
+    <footer style="background-color: #343a40; color: #ffffff; margin-top: 1rem; padding-top: 1rem; padding-bottom: 1rem;">
+        <div style="text-align: center;">
+            <p style="margin-bottom: 0;">&copy; 2024 UNISCORE. Todos los derechos reservados.</p>
+            <p style="margin-bottom: 0;">
+                Diseñado por: 
+                <a href="https://www.linkedin.com/in/aisoranar/" target="_blank" 
+                   style="color: #f8f9fa; text-decoration: none; font-weight: bold; 
+                          transition: color 0.3s ease, text-shadow 0.3s ease; 
+                          text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);">
+                    Aisor Anaya
             </a>
         </p>
     </div>
