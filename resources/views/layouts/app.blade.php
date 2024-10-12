@@ -143,19 +143,19 @@
         <div class="container mx-auto p-4 navbar-custom">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <h1 class="text-3xl font-bold mr-2">UNISCORE</h1>
                     <a href="{{ route('home.index') }}">
-                        <img src="{{ asset('assets/img/uniscoreicon.svg') }}" alt="Icono de Uniscore" class="h-16 w-16">
+                        <img src="{{ asset('assets/img/uniscoreicon.svg') }}" alt="Icono de Uniscore" class="h-16 w-16 mr-2">
                     </a>
+                    <a href="{{ route('home.index') }}" class="text-3xl font-bold">UNISCORE</a>
                 </div>
-                <div class="menu-toggle">
+                <div class="menu-toggle ml-4">
                     <div></div>
                     <div></div>
                     <div></div>
                 </div>
             </div>
             <nav class="menu mt-4 lg:mt-0">
-                <ul class="flex flex-col lg:flex-row items-center lg:items-center gap-4 lg:gap-8">
+                <ul class="flex flex-col lg:flex-row items-center lg:items-center gap-4 lg:gap-8 overflow-x-auto lg:overflow-visible">
                     <li><a href="{{ route('home.index') }}"><i class="bi bi-house-door-fill"></i> Inicio</a></li>
                     <li><a href="#"><i class="bi bi-calendar"></i> Torneos</a></li>
                     @auth
@@ -197,7 +197,7 @@
                         </li>
                     @endif
                     @guest
-                        <li><a href="#" class="btn btn-primary"><i class="bi bi-person-fill"></i> Iniciar Sesión</a></li>
+                        <li><a href="{{ route('login') }}" class="btn btn-primary"><i class="bi bi-person-fill"></i> Iniciar Sesión</a></li>
                     @endguest
                 </ul>
             </nav>
