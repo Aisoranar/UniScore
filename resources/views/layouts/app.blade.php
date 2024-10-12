@@ -158,12 +158,7 @@
                 <ul class="flex flex-col lg:flex-row items-center lg:items-center gap-4 lg:gap-8 overflow-x-auto lg:overflow-visible">
                     <li><a href="{{ route('home.index') }}" class="nav-link"><i class="bi bi-house-door-fill"></i> Inicio</a></li>
                     <li><a href="#" class="nav-link"><i class="bi bi-calendar"></i> Torneos</a></li>
-                    @auth
-                        <li><a href="#" class="nav-link"><i class="bi bi-calendar"></i> Torneos Admin</a></li>
-                        @if(auth()->user()->is_admin)
-                            <li><a href="#" class="nav-link"><i class="bi bi-lock-fill"></i> Administrador</a></li>
-                        @endif
-                    @endauth
+                 
                     <li><a href="#" class="nav-link"><i class="bi bi-people-fill"></i> Equipos</a></li>
                     <li><a href="#" class="nav-link"><i class="bi bi-list"></i> Clasificación</a></li>
                     <li><a href="#" class="nav-link"><i class="bi bi-star-fill"></i> Goleadores</a></li>
