@@ -10,6 +10,11 @@ use App\Http\Controllers\CoachController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileCoachController;
 use App\Http\Controllers\TraineeController;
+use App\Http\Controllers\TournamentController;
+use App\Http\Controllers\TeamController;
+use App\Http\Controllers\PlayerController;
+use App\Http\Controllers\MatchController;
+use App\Http\Controllers\StatisticController;
 
 /*
 |-------------------------------------------------------------------------- 
@@ -134,4 +139,23 @@ Route::middleware(['auth'])->prefix('profile')->group(function () {
     // Ruta para actualizar la observación del estudiante
     Route::put('/update-student/observation', [TraineeController::class, 'updateStudentObservation'])
         ->name('profile.updateStudentObservation');
+});
+
+
+// Rutas para la gestión de torneos y recursos relacionados
+Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function () {
+    // CRUD de Torneos
+    Route::resource('tournaments', TournamentController::class);
+    
+    // CRUD de Equipos por Torneo
+    Route::resource('tournaments.teams', TeamController::class)->shallow();
+    
+    // CRUD de Jugadores por Equipo
+    Route::resource('teams.players', PlayerController::class)->shallow();
+
+    // CRUD de Partidos por Torneo
+    Route::resource('tournaments.matches', MatchController::class)->shallow();
+
+    // CRUD de Estadísticas por Partido
+    Route::resource('matches.statistics', StatisticController::class)->shallow();
 });

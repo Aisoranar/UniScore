@@ -5,23 +5,21 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void
-    {
+    public function up(): void {
         Schema::create('profile_coaches', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Relación con usuario
-            $table->string('name'); // Nombre
-            $table->string('surname'); // Apellido
-            $table->integer('experience')->nullable(); // Años de experiencia
-            $table->string('specialty')->nullable(); // Especialidad
-            $table->string('phone')->nullable(); // Teléfono de contacto
-            $table->string('email')->nullable(); // Correo del coach
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->string('surname');
+            $table->integer('experience')->nullable();
+            $table->string('specialty')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
             $table->timestamps();
         });
     }
 
-    public function down(): void
-    {
+    public function down(): void {
         Schema::dropIfExists('profile_coaches');
     }
 };

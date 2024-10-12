@@ -19,6 +19,7 @@ class ProfileCoach extends Model
         'email',
     ];
 
+    // Relación con User
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -7,10 +7,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Traits\HasRoles;
+
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable,HasRoles;
 
     protected $fillable = [
         'first_name',
@@ -48,4 +50,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Relación con ProfileCoach
+    public function profileCoach()
+    {
+        return $this->hasOne(ProfileCoach::class);
+    }
+
+    // Relación con ProfileTrainee
+    public function profileTrainee()
+    {
+        return $this->hasOne(ProfileTrainee::class);
+    }
 }
