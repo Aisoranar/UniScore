@@ -1,4 +1,4 @@
-@extends('layouts.app-master')
+@extends('layouts.app')
 
 @section('content')
 <div class="container mx-auto fade-in">
