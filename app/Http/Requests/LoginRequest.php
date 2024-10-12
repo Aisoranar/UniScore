@@ -23,34 +23,42 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cedula' => 'required|string', // Cambiado de 'username' a 'cedula'
-            'password' => 'required|string',
-            'role' => 'required|in:user,admin', // Asegúrate de validar el rol
+            'username' => 'required|string',
+            'password' => 'required|string|min:8',
         ];
     }
 
     /**
-     * Get the credentials for authentication.
-     *
-     * @return array<string, string>
+     * Get the credentials needed for login.
      */
     public function getCredentials(): array
-    {
+{
+    $username = $this->get('username');
+
+    // Verifica si el nombre de usuario es un correo electrónico
+    if ($this->isEmail($username)) {
         return [
-            'cedula' => $this->input('cedula'), // Cambiado de 'username' a 'cedula'
-            'password' => $this->input('password'),
+            'email' => $username,
+            'password' => $this->get('password')
         ];
     }
 
+    // Si no es un correo, intenta con el nombre de usuario
+    return $this->only('username', 'password');
+}
+
+
+
     /**
-     * Check if the provided value is a valid email address.
-     *
-     * @param  string  $value
-     * @return bool
+     * Determine if the provided value is an email address.
      */
-    protected function isEmail(string $value): bool
+    public function isEmail($value): bool
     {
         $factory = $this->container->make(ValidationFactory::class);
-        return !$factory->make(['cedula' => $value], ['cedula' => 'email'])->fails();
+
+        return !$factory->make(
+            ['username' => $value],
+            ['username' => 'email']
+        )->fails();
     }
 }

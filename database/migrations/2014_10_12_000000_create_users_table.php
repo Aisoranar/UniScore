@@ -10,13 +10,15 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('cedula')->unique(); // Mantener esta línea
-            $table->string('name')->nullable();
-            
-            // Eliminar la columna 'username'
+            $table->string('first_name')->nullable(); // Primer Nombre
+            $table->string('second_name')->nullable(); // Segundo Nombre
+            $table->string('first_lastname')->nullable(); // Primer Apellido
+            $table->string('second_lastname')->nullable(); // Segundo Apellido
+            $table->string('username')->unique();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('role')->default('trainee'); // Cambiado a trainee
             $table->rememberToken();
             $table->timestamps();
         });

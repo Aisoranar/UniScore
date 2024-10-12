@@ -4,97 +4,134 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\PublicController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\TorneoController;
-use App\Http\Controllers\GaleriaController;
-use App\Http\Controllers\EquipoController;
-use App\Http\Controllers\GoleadorController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\SuperAdminController;
+use App\Http\Controllers\CoachController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileCoachController;
+use App\Http\Controllers\TraineeController;
 
 /*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Aquí es donde puedes registrar las rutas web para tu aplicación.
-|
+|-------------------------------------------------------------------------- 
+| Web Routes 
+|-------------------------------------------------------------------------- 
+| Aquí se registran las rutas para la aplicación. Estas rutas son cargadas 
+| por el RouteServiceProvider dentro de un grupo que contiene el middleware "web". 
+| 
 */
 
-// Ruta principal (página de torneos)
-Route::get('/', [PublicController::class, 'index'])->name('home');
-
-// Rutas de Registro de Usuarios
-Route::get('/register', [RegisterController::class, 'show'])->name('register.show');
-Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
-
-// Rutas de Login de Usuarios
-Route::get('/login', [LoginController::class, 'show'])->name('login.show');
-Route::post('/login', [LoginController::class, 'login'])->name('login.post');
-
-// Ruta de Inicio después del Login
-Route::get('/home', [HomeController::class, 'index'])->name('home.dashboard');
-
-// Ruta de Logout para cerrar sesión
-Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
-
-// Rutas Públicas para ver los torneos y detalles
-Route::get('/torneos', [PublicController::class, 'torneos'])->name('torneos.index');
-Route::get('/torneos/{id}', [PublicController::class, 'showTorneo'])->name('torneos.show');
-
-// Ruta para la clasificación de equipos con paginación
-Route::get('/clasificacion', [PublicController::class, 'clasificacion'])->name('clasificacion');
-
-// Ruta para ver los próximos partidos
-Route::get('/partidos', [PublicController::class, 'proximosPartidos'])->name('partidos');
-
-// Ruta para la galería de fotos y videos con paginación
-Route::get('/galeria', [PublicController::class, 'galeria'])->name('galeria');
-
-// Ruta para mostrar todos los equipos con paginación
-Route::get('/equipos', [PublicController::class, 'equipos'])->name('equipos');
-
-// Ruta para mostrar los goleadores con paginación
-Route::get('/goleadores', [PublicController::class, 'goleadores'])->name('goleadores');
-
-// Rutas de Administración protegidas por autenticación
-Route::middleware('auth')->group(function () {
-    // Ruta principal del Panel de Administración
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
-
-    // Rutas para la gestión de torneos en el Panel de Administración
-    Route::resource('admin/torneos', TorneoController::class)->names([
-        'index' => 'admin.torneos.index',
-        'create' => 'admin.torneos.create',
-        'store' => 'admin.torneos.store',
-        'show' => 'admin.torneos.show',
-        'edit' => 'admin.torneos.edit',
-        'update' => 'admin.torneos.update',
-        'destroy' => 'admin.torneos.destroy',
-    ]);
-
-    // Rutas para los equipos dentro del contexto del torneo
-    Route::prefix('admin/torneos/{torneoId}')->group(function () {
-        Route::get('equipos', [EquipoController::class, 'index'])->name('admin.equipos.index');
-        Route::get('equipos/create', [EquipoController::class, 'create'])->name('admin.equipos.create');
-        Route::post('equipos', [EquipoController::class, 'store'])->name('admin.equipos.store');
-        Route::get('equipos/{id}', [EquipoController::class, 'show'])->name('admin.equipos.show');
-        Route::get('equipos/{id}/edit', [EquipoController::class, 'edit'])->name('admin.equipos.edit');
-        Route::put('equipos/{id}', [EquipoController::class, 'update'])->name('admin.equipos.update');
-        Route::delete('equipos/{id}', [EquipoController::class, 'destroy'])->name('admin.equipos.destroy');
-
-        // Rutas para los goleadores dentro del contexto del torneo
-        Route::get('goleadores', [GoleadorController::class, 'index'])->name('admin.goleadores.index');
-        Route::get('goleadores/create', [GoleadorController::class, 'create'])->name('admin.goleadores.create');
-        Route::post('goleadores', [GoleadorController::class, 'store'])->name('admin.goleadores.store');
-        Route::get('goleadores/{id}', [GoleadorController::class, 'show'])->name('admin.goleadores.show');
-        Route::get('goleadores/{id}/edit', [GoleadorController::class, 'edit'])->name('admin.goleadores.edit');
-        Route::put('goleadores/{id}', [GoleadorController::class, 'update'])->name('admin.goleadores.update');
-        Route::delete('goleadores/{id}', [GoleadorController::class, 'destroy'])->name('admin.goleadores.destroy');
-    });
+// Ruta de la página principal
+Route::get('/', function () {
+    return view('welcome');
 });
 
-// Rutas para la autenticación de administradores
-Route::get('/admin/login', [AdminController::class, 'showLoginForm'])->name('admin.login');
-Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login.submit');
-Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
+// Rutas de autenticación para el SuperAdmin
+Route::middleware(['auth', 'role:superadmin'])->group(function () {
+    // CRUD de usuarios, accesible solo para el SuperAdmin
+    Route::resource('users', UserController::class);
+
+    // Ruta para la creación de roles (incluye los roles 'coach' y 'student')
+    Route::post('/superadmin/create-role', [SuperAdminController::class, 'createRole'])
+        ->name('superadmin.createRole');
+
+    // Dashboard del SuperAdmin
+    Route::get('/superadmin', [SuperAdminController::class, 'index'])
+        ->name('superadmin.index');
+
+    // Ruta para cerrar sesión del SuperAdmin
+    Route::post('/superadmin/logout', [SuperAdminController::class, 'logout'])
+        ->name('superadmin.logout');
+});
+
+// Rutas de registro solo para el SuperAdmin
+Route::get('/register', [RegisterController::class, 'show'])
+    ->name('register.show')
+    ->middleware('guest');
+Route::post('/register', [RegisterController::class, 'register'])
+    ->name('register.perform')
+    ->middleware('guest');
+
+// Rutas de login (accesibles para cualquier usuario no autenticado)
+Route::get('/login', [LoginController::class, 'show'])
+    ->name('login')
+    ->middleware('guest');
+Route::post('/login', [LoginController::class, 'login'])
+    ->name('login.perform')
+    ->middleware('guest');
+
+Route::middleware('auth')->group(function () {
+    // Ruta accesible para superadmin y estudiante
+    Route::get('/estudiante', function () {
+        return view('view.estudiante.index'); // Redirige a view/estudiante/index.blade.php
+    })->name('estudiante.dashboard')->middleware('role:student|superadmin');
+
+    // Ruta accesible solo para superadmin y coach
+    Route::get('/coach', function () {
+        return view('view.coach.index'); // Redirige a view/coach/index.blade.php
+    })->name('coach.dashboard')->middleware('role:coach|superadmin');
+});
+
+// Ruta para mostrar el home de usuarios autenticados
+Route::get('/home', [HomeController::class, 'index'])
+    ->name('home.index')
+    ->middleware('auth');
+
+// Ruta para cerrar sesión usando POST (accesible para todos los usuarios autenticados)
+Route::post('/logout', [LogoutController::class, 'logout'])
+    ->name('logout.perform')
+    ->middleware('auth');
+
+// Rutas para gestionar el perfil del estudiante
+Route::get('/perfil/{id}/editar', [TraineeController::class, 'edit'])
+    ->name('perfil.editar')
+    ->middleware('auth');
+Route::put('/perfil/{id}', [TraineeController::class, 'update'])
+    ->name('student.update')
+    ->middleware('auth');
+
+// Rutas para la lista de coach y estudiantes
+Route::middleware(['auth'])->group(function () {
+    // Ruta para la vista de coach, accesible solo para superadmin
+    Route::get('/list/coach', [CoachController::class, 'index'])
+        ->name('list.coach')
+        ->middleware('role:superadmin');
+
+    // Ruta para la vista de estudiantes, accesible para coach y superadmin
+    Route::get('/list/students', [TraineeController::class, 'index'])
+        ->name('list.students')
+        ->middleware('role:coach|superadmin');
+});
+
+// Rutas para el perfil del coach
+Route::middleware('auth')->group(function () {
+    // Ruta para mostrar el detalle del perfil del coach
+    Route::get('/coach/perfil/{id}', [ProfileCoachController::class, 'show'])
+        ->name('coach.perfil.show');
+    
+    // Ruta para mostrar el formulario de edición (GET)
+    Route::get('/coach/perfil-edit/{id}', [ProfileCoachController::class, 'edit'])
+        ->name('coach.perfil.edit');
+    
+    // Ruta para actualizar el perfil (PUT)
+    Route::put('/coach/perfil/{id}', [ProfileCoachController::class, 'update'])
+        ->name('coach.perfil.update');
+});
+
+// Rutas para los perfiles
+Route::middleware(['auth'])->prefix('profile')->group(function () {
+    // Ruta para mostrar el perfil del estudiante
+    Route::get('/{id}', [TraineeController::class, 'show'])
+        ->name('profile.show');
+    
+    // Ruta para actualizar el perfil del coach
+    Route::put('/coach/{user_id}', [ProfileCoachController::class, 'update'])
+        ->name('profile.updateCoach');
+    
+    // Ruta para actualizar el perfil del estudiante
+    Route::put('/{user_id}', [TraineeController::class, 'update'])
+        ->name('profile.update');
+
+    // Ruta para actualizar la observación del estudiante
+    Route::put('/update-student/observation', [TraineeController::class, 'updateStudentObservation'])
+        ->name('profile.updateStudentObservation');
+});

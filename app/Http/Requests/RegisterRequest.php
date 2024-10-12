@@ -15,17 +15,40 @@ class RegisterRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to this request.
+     * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'cedula' => 'required|unique:users,cedula',
+            'first_name' => 'required|string|max:255',
+            'second_name' => 'nullable|string|max:255',
+            'first_lastname' => 'required|string|max:255',
+            'second_lastname' => 'nullable|string|max:255',
+            'username' => 'required|string|unique:users,username|max:255',
             'email' => 'required|email|unique:users,email',
-            'username' => 'required|unique:users,username',
-            'password' => 'required|min:8|confirmed',
+            'password' => 'required|string|min:8|confirmed',
+            'password_confirmation' => 'required|string|min:8',
+        ];
+    }
+
+    /**
+     * Customize the error messages for the validation.
+     */
+    public function messages(): array
+    {
+        return [
+            'first_name.required' => 'El primer nombre es obligatorio.',
+            'first_lastname.required' => 'El primer apellido es obligatorio.',
+            'email.required' => 'El correo electrónico es obligatorio.',
+            'email.unique' => 'El correo electrónico ya está registrado.',
+            'username.required' => 'El nombre de usuario es obligatorio.',
+            'username.unique' => 'El nombre de usuario ya está registrado.',
+            'password.required' => 'La contraseña es obligatoria.',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
+            'password.confirmed' => 'La confirmación de la contraseña no coincide.',
+            'password_confirmation.required' => 'Debes confirmar tu contraseña.',
         ];
     }
 }

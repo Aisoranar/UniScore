@@ -10,9 +10,9 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
     <style>
-        /* Estilos del Navbar */
         .navbar-custom {
             position: relative;
             display: flex;
@@ -20,19 +20,17 @@
             align-items: center;
             padding: 1rem 16px;
             background-color: #fff;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); /* Sombras para dar más profundidad */
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s ease;
         }
 
-        /* Efecto de fondo sticky cuando se hace scroll */
         .navbar-sticky {
             background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(5px); /* Efecto de desenfoque */
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2); /* Sombras más profundas */
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
         }
 
-        /* Estilos del botón hamburguesa */
-        .navbar-custom .menu-toggle {
+        .menu-toggle {
             display: none;
             flex-direction: column;
             cursor: pointer;
@@ -40,8 +38,7 @@
             transition: all 0.3s ease;
         }
 
-        /* Las barras del botón hamburguesa */
-        .navbar-custom .menu-toggle div {
+        .menu-toggle div {
             width: 30px;
             height: 4px;
             background-color: #333;
@@ -50,7 +47,6 @@
             transition: all 0.4s ease;
         }
 
-        /* Transformación del botón hamburguesa en una X cuando se hace clic */
         .menu-toggle.active div:nth-child(1) {
             transform: translateY(9px) rotate(45deg);
         }
@@ -63,8 +59,7 @@
             transform: translateY(-9px) rotate(-45deg);
         }
 
-        /* Estilos del menú */
-        .navbar-custom nav ul {
+        nav ul {
             display: flex;
             gap: 20px;
             margin: 0;
@@ -72,7 +67,7 @@
             list-style: none;
         }
 
-        .navbar-custom nav ul li a {
+        nav ul li a {
             display: flex;
             align-items: center;
             padding: 10px 20px;
@@ -83,62 +78,59 @@
             transition: background-color 0.4s, color 0.4s, box-shadow 0.4s;
         }
 
-        .navbar-custom nav ul li a:hover {
+        nav ul li a:hover {
             background-color: #007bff;
             color: #fff;
-            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3); /* Sombra al pasar el ratón */
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
         }
 
-        .navbar-custom .menu {
+        .menu {
             display: flex;
             align-items: center;
         }
 
-        /* Mobile-first: Ajustes para pantallas pequeñas */
         @media (max-width: 1024px) {
-            .navbar-custom .menu-toggle {
+            .menu-toggle {
                 display: flex;
             }
 
-            /* Menú desplegable animado en dispositivos móviles */
-            .navbar-custom nav ul {
+            nav ul {
                 flex-direction: column;
                 position: absolute;
                 top: 100%;
                 left: 0;
                 width: 100%;
-                background-color: rgba(255, 255, 255, 0.95); /* Fondo semi-transparente */
+                background-color: rgba(255, 255, 255, 0.95);
                 transform: translateY(-150%);
                 transition: transform 0.6s ease, opacity 0.6s;
                 z-index: 9999;
                 opacity: 0;
                 visibility: hidden;
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Sombras más profundas */
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             }
 
-            .navbar-custom nav ul.show-menu {
+            nav ul.show-menu {
                 transform: translateY(0);
                 opacity: 1;
                 visibility: visible;
             }
 
-            .navbar-custom nav ul li a {
+            nav ul li a {
                 padding: 16px;
                 border-bottom: 1px solid #ddd;
                 text-align: center;
                 transition: all 0.4s ease;
             }
 
-            .navbar-custom h1 {
+            h1 {
                 font-size: 1.8rem;
                 text-align: center;
                 flex: 1;
             }
         }
 
-        /* Ajustes para pantallas grandes */
         @media (min-width: 1025px) {
-            .navbar-custom nav ul {
+            nav ul {
                 flex-direction: row;
             }
         }
@@ -149,32 +141,63 @@
     <!-- Header -->
     <header class="bg-white shadow-sm mb-4 navbar-custom" id="navbar">
         <div class="container mx-auto p-4 navbar-custom">
-            <h1 class="text-3xl font-bold">UNISCORE</h1>
-            <div class="menu-toggle">
-                <div></div>
-                <div></div>
-                <div></div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <h1 class="text-3xl font-bold mr-2">UNISCORE</h1>
+                    <a href="{{ route('home.index') }}">
+                        <img src="{{ asset('assets/img/uniscoreicon.svg') }}" alt="Icono de Uniscore" class="h-16 w-16">
+                    </a>
+                </div>
+                <div class="menu-toggle">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
             </div>
-            <nav class="menu">
-                <ul class="flex flex-col lg:flex-row items-start lg:items-center">
-                    <li><a href="{{ route('home') }}"><i class="bi bi-house-door-fill"></i> Inicio</a></li>
-                    <li><a href="{{ route('torneos.index') }}"><i class="bi bi-calendar"></i> Torneos</a></li>
+            <nav class="menu mt-4 lg:mt-0">
+                <ul class="flex flex-col lg:flex-row items-center lg:items-center gap-4 lg:gap-8">
+                    <li><a href="{{ route('home.index') }}"><i class="bi bi-house-door-fill"></i> Inicio</a></li>
+                    <li><a href="#"><i class="bi bi-calendar"></i> Torneos</a></li>
                     @auth
-                        <li><a href="{{ route('admin.torneos.index') }}"><i class="bi bi-calendar"></i> Torneos Admin</a></li>
+                        <li><a href="#"><i class="bi bi-calendar"></i> Torneos Admin</a></li>
                         @if(auth()->user()->is_admin)
-                            <li><a href="{{ route('admin.dashboard') }}"><i class="bi bi-lock-fill"></i> Administrador</a></li>
+                            <li><a href="#"><i class="bi bi-lock-fill"></i> Administrador</a></li>
                         @endif
                     @endauth
-                    <li><a href="{{ route('equipos') }}"><i class="bi bi-people-fill"></i> Equipos</a></li>
-                    <li><a href="{{ route('clasificacion') }}"><i class="bi bi-list"></i> Clasificación</a></li>
-                    <li><a href="{{ route('goleadores') }}"><i class="bi bi-star-fill"></i> Goleadores</a></li>
-                    <li><a href="{{ route('galeria') }}"><i class="bi bi-image"></i> Fotos y Videos</a></li>
-                    @auth
-                        <li><a href="#"><i class="bi bi-gear-fill"></i> Configuración</a></li>
-                        <li><a href="{{ route('logout') }}" class="text-danger"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
-                    @endauth
+                    <li><a href="#"><i class="bi bi-people-fill"></i> Equipos</a></li>
+                    <li><a href="#"><i class="bi bi-list"></i> Clasificación</a></li>
+                    <li><a href="#"><i class="bi bi-star-fill"></i> Goleadores</a></li>
+                    <li><a href="#"><i class="bi bi-image"></i> Fotos y Videos</a></li>
+                    @if(Auth::check())
+                        @if(Auth::user()->role === 'trainee')
+                            <li><a href="{{ route('perfil.editar', ['id' => Auth::id()]) }}" class="nav-link text-black font-semibold hover:text-yellow-300 transition duration-300 flex items-center @if(request()->routeIs('perfil.editar')) active @endif">
+                                <i class="fas fa-user-graduate mr-2"></i> Perfil
+                            </a></li>
+                        @endif
+
+                        @if(Auth::user()->role === 'coach')
+                            <li><a href="{{ route('coach.perfil.show', ['id' => Auth::user()->id]) }}" class="nav-link text-black font-semibold hover:text-yellow-300 transition duration-300 flex items-center">
+                                <i class="fas fa-chalkboard-teacher mobile-nav-icon"></i> Perfil Coach
+                            </a></li>
+                        @endif
+
+                        @if(Auth::user()->role === 'superadmin')
+                            <li><a href="{{ route('users.index') }}" class="nav-link text-black font-semibold hover:text-yellow-300 transition duration-300 flex items-center @if(request()->routeIs('users.index')) active @endif">
+                                <i class="fas fa-cogs mr-2"></i> Configuración
+                            </a></li>
+                        @endif
+
+                        <li>
+                            <form id="logout-form" action="{{ route('logout.perform') }}" method="POST" class="flex items-center">
+                                @csrf
+                                <button type="submit" class="nav-link text-black font-semibold hover:text-yellow-300 transition duration-300 flex items-center">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión
+                                </button>
+                            </form>
+                        </li>
+                    @endif
                     @guest
-                        <li><a href="{{ route('login.show') }}" class="btn btn-primary"><i class="bi bi-person-fill"></i> Iniciar Sesión</a></li>
+                        <li><a href="#" class="btn btn-primary"><i class="bi bi-person-fill"></i> Iniciar Sesión</a></li>
                     @endguest
                 </ul>
             </nav>
@@ -197,29 +220,25 @@
                           transition: color 0.3s ease, text-shadow 0.3s ease; 
                           text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);">
                     Aisor Anaya
-            </a>
-        </p>
-    </div>
-</footer>
+                </a>
+            </p>
+        </div>
+    </footer>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
     <script>
         const toggleButton = document.querySelector('.menu-toggle');
         const navMenu = document.querySelector('nav ul');
         const navbar = document.getElementById('navbar');
 
-        // Evento para abrir/cerrar el menú
         toggleButton.addEventListener('click', function() {
             toggleButton.classList.toggle('active');
             navMenu.classList.toggle('show-menu');
         });
 
-        // Añadir el efecto sticky al hacer scroll
         window.addEventListener('scroll', function() {
             if (window.scrollY > 50) {
                 navbar.classList.add('navbar-sticky');

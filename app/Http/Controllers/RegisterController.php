@@ -6,23 +6,27 @@ use Illuminate\Http\Request;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterController extends Controller
 {
-    //
-    public function show(){
-        if(Auth::check()){
-            return redirect('/home');
-
+    // Mostrar el formulario de registro
+    public function show()
+    {
+        if (Auth::check() || User::where('role', 'superadmin')->exists()) {
+            return redirect('/login')->withErrors('Ya existe un SuperAdmin registrado.');
         }
-        return view('auth.register');
 
+        return view('auth.register');
     }
 
-    public function register(RegisterRequest $request){
-        $user = User::create($request->validated());
-        return redirect('/login')->with('success', 'Account created successfully');
-        
-    }    
+    // Registrar al SuperAdmin
+    public function register(RegisterRequest $request)
+    {
+        $user = User::create(array_merge(
+            $request->validated(),
+            ['role' => 'superadmin']
+        ));
+
+        return redirect('/login')->with('success', 'SuperAdmin creado exitosamente.');
+    }
 }

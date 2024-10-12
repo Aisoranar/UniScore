@@ -1,44 +1,51 @@
 @extends('layouts.auth-master')
 
-@section('title', 'Iniciar Sesión')
-
 @section('content')
-<div class="text-center mb-8">
-    <h1 class="text-4xl font-bold text-blue-700 animate-pulse">Iniciar Sesión</h1>
-</div>
-<form action="{{ route('login.post') }}" method="POST" class="space-y-6">
-    @csrf
-    @include('layouts.partials.message')
+    <form action="{{ route('login.perform') }}" method="POST" class="space-y-4">
+        @csrf
+        <h1 class="text-2xl font-bold text-center mb-6">Iniciar Sesión</h1>
+        @include('layouts.partials.message')
 
-    <!-- Cedula con Label Flotante -->
-    <div class="floating-label mb-6">
-        <input type="text" name="cedula" id="cedulaInput" placeholder=" " class="peer" required>
-        <label for="cedulaInput">Ingrese su cédula</label>
-    </div>
+        <div class="mb-4">
+            <label for="username" class="form-label font-semibold">Nombre de usuario o Correo electrónico</label>
+            <div class="flex items-center border rounded-lg overflow-hidden">
+                <span class="px-3 bg-gray-200 text-gray-600"><i class="fas fa-user"></i></span>
+                <input type="text" name="username" class="form-control border-none" placeholder="Ingresa tu usuario o correo" required>
+            </div>
+        </div>
 
-    <!-- Contraseña con Label Flotante -->
-    <div class="floating-label mb-6">
-        <input type="password" name="password" id="passwordInput" placeholder=" " class="peer" required>
-        <label for="passwordInput">Ingrese su contraseña</label>
-    </div>
+        <div class="mb-4">
+            <label for="password" class="form-label font-semibold">Contraseña</label>
+            <div class="flex items-center border rounded-lg overflow-hidden">
+                <span class="px-3 bg-gray-200 text-gray-600"><i class="fas fa-lock"></i></span>
+                <input type="password" name="password" id="password" class="form-control border-none" placeholder="Ingresa tu contraseña" required>
+                <span class="px-3 bg-gray-200 text-gray-600 cursor-pointer" onclick="togglePassword()">
+                    <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                </span>
+            </div>
+        </div>
 
-    <!-- Tipo de Usuario con Label Flotante -->
-    <div class="floating-label mb-6">
-        <select name="role" id="roleSelect" class="peer" required>
-            <option value="user">Usuario</option>
-            <option value="admin">Administrador</option>
-        </select>
-        <label for="roleSelect">Tipo de Usuario</label>
-    </div>
+        <div class="flex items-center mb-4">
+            <input type="checkbox" name="remember" id="remember">
+            <label for="remember">Recordarme</label>
+        </div>
 
-    <!-- Botón de Enviar -->
-    <button type="submit" class="btn-primary">
-        Iniciar Sesión
-    </button>
+        <button type="submit" class="btn btn-primary w-full">Iniciar Sesión</button>
 
-    <div class="text-center text-sm text-gray-600 mt-4">
-        <p>¿No tienes cuenta? <a href="{{ route('register.show') }}" class="text-blue-600 hover:underline font-medium">Crear cuenta</a></p>
-        <p class="mt-3"><a href="{{ route('home') }}" class="text-gray-600 hover:text-blue-600 hover:underline font-medium">← Volver al inicio</a></p>
-    </div>
-</form>
+        @if(!\App\Models\User::where('role', 'superadmin')->exists())
+            <div class="mt-4 text-center">
+                <a href="{{ route('register.show') }}" class="text-sm text-blue-500">Crear SuperAdmin</a>
+            </div>
+        @endif
+    </form>
+
+    <script>
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            togglePasswordIcon.classList.toggle('fa-eye-slash');
+        }
+    </script>
 @endsection

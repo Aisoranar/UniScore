@@ -8,54 +8,44 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    // Mostrar la vista de login
     public function show()
     {
-        // Redirige a la página de inicio si el usuario ya está autenticado
         if (Auth::check()) {
             return redirect('/home');
         }
         return view('auth.login');
     }
 
+    // Validar el login
     public function login(LoginRequest $request)
     {
-        // Obtener credenciales del formulario
-        $credentials = [
-            'cedula' => $request->input('cedula'),
-            'password' => $request->input('password'),
-        ];
+        $credentials = $request->getCredentials();
 
-        // Validar según el rol seleccionado (user o admin)
-        if ($request->role === 'admin') {
-            if (!Auth::guard('admin')->attempt($credentials)) {
-                return redirect()->back()->withErrors('Cédula y/o Contraseña incorrectos para Administrador')->withInput();
-            }
-
-            $admin = Auth::guard('admin')->user();
-            return $this->authenticated($request, $admin, '/admin');
-        } else {
-            if (!Auth::guard('web')->attempt($credentials)) {
-                return redirect()->back()->withErrors('Cédula y/o Contraseña incorrectos para Usuario')->withInput();
-            }
-
-            $user = Auth::guard('web')->user();
-            return $this->authenticated($request, $user, '/home');
+        if (!Auth::attempt($credentials)) {
+            return redirect()->to('/login')->withErrors('Username y/o contraseña incorrectos');
         }
+
+        $user = Auth::user();
+
+        return $this->authenticated($request, $user);
     }
 
-    protected function authenticated(Request $request, $user, $redirectPath)
+    // Redirigir según el rol del usuario autenticado
+    public function authenticated(Request $request, $user)
     {
-        // Redirige al usuario a la ruta deseada después de la autenticación
-        return redirect()->intended($redirectPath);
-    }
+        if ($user->role === 'superadmin') {
+            return redirect()->route('home.index');
+        }
 
-    public function logout(Request $request)
-    {
-        // Cierra la sesión del usuario para el guardia actual
-        Auth::guard($request->guard ?? 'web')->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        if ($user->role === 'student') {
+            return redirect()->route('home.index'); // Redirigir a 'student'
+        }
 
-        return redirect('/')->with('success', 'Cierre de sesión exitoso.');
+        if ($user->role === 'docent') {
+            return redirect()->route('home.index'); // Redirigir a 'docent'
+        }
+
+        return redirect()->route('home.index');
     }
 }

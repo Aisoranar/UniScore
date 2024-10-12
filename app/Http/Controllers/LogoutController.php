@@ -15,5 +15,4 @@ class LogoutController extends Controller
 
         return redirect()->to('/login');
     }
-    //
 }

@@ -6,14 +6,13 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    public function run()
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
     {
         $this->call([
-            EquipoSeeder::class,
-            JugadorSeeder::class,
-            GoleadorSeeder::class,
-            TorneoSeeder::class,
-            PartidoSeeder::class,
+            DepartmentAndCitySeeder::class, // Añade el seeder aquí
         ]);
     }
 }
