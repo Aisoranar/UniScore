@@ -8,16 +8,13 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('profile_trainees', function (Blueprint $table) {
-            $table->id(); // ID único
+            $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Relación con usuario
-            
-            // Información general del trainee (jugador)
             $table->string('name'); // Nombre
             $table->string('surname'); // Apellido
             $table->string('position')->nullable(); // Posición en el equipo
             $table->string('experience_level')->nullable(); // Nivel de experiencia
             $table->string('phone')->nullable(); // Teléfono de contacto
-
             $table->timestamps();
         });
     }
