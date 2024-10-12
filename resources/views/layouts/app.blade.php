@@ -144,9 +144,9 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
                     <a href="{{ route('home.index') }}">
-                        <img src="{{ asset('assets/img/uniscoreicon.svg') }}" alt="Icono de Uniscore" class="h-16 w-16 mr-2">
+                        <img src="{{ asset('assets/img/uniscoreicon.svg') }}" alt="Icono de Uniscore" class="h-16 w-16 mr-2 @auth h-20 w-20 @endauth">
                     </a>
-                    <a href="{{ route('home.index') }}" class="text-3xl font-bold">UNISCORE</a>
+                    <a href="{{ route('home.index') }}" class="text-3xl font-bold text-gradient">UNISCORE</a>
                 </div>
                 <div class="menu-toggle ml-4">
                     <div></div>
@@ -156,43 +156,35 @@
             </div>
             <nav class="menu mt-4 lg:mt-0">
                 <ul class="flex flex-col lg:flex-row items-center lg:items-center gap-4 lg:gap-8 overflow-x-auto lg:overflow-visible">
-                    <li><a href="{{ route('home.index') }}"><i class="bi bi-house-door-fill"></i> Inicio</a></li>
-                    <li><a href="#"><i class="bi bi-calendar"></i> Torneos</a></li>
+                    <li><a href="{{ route('home.index') }}" class="nav-link"><i class="bi bi-house-door-fill"></i> Inicio</a></li>
+                    <li><a href="#" class="nav-link"><i class="bi bi-calendar"></i> Torneos</a></li>
                     @auth
-                        <li><a href="#"><i class="bi bi-calendar"></i> Torneos Admin</a></li>
+                        <li><a href="#" class="nav-link"><i class="bi bi-calendar"></i> Torneos Admin</a></li>
                         @if(auth()->user()->is_admin)
-                            <li><a href="#"><i class="bi bi-lock-fill"></i> Administrador</a></li>
+                            <li><a href="#" class="nav-link"><i class="bi bi-lock-fill"></i> Administrador</a></li>
                         @endif
                     @endauth
-                    <li><a href="#"><i class="bi bi-people-fill"></i> Equipos</a></li>
-                    <li><a href="#"><i class="bi bi-list"></i> Clasificación</a></li>
-                    <li><a href="#"><i class="bi bi-star-fill"></i> Goleadores</a></li>
-                    <li><a href="#"><i class="bi bi-image"></i> Fotos y Videos</a></li>
+                    <li><a href="#" class="nav-link"><i class="bi bi-people-fill"></i> Equipos</a></li>
+                    <li><a href="#" class="nav-link"><i class="bi bi-list"></i> Clasificación</a></li>
+                    <li><a href="#" class="nav-link"><i class="bi bi-star-fill"></i> Goleadores</a></li>
+                    <li><a href="#" class="nav-link"><i class="bi bi-image"></i> Fotos y Videos</a></li>
                     @if(Auth::check())
                         @if(Auth::user()->role === 'trainee')
-                            <li><a href="{{ route('perfil.editar', ['id' => Auth::id()]) }}" class="nav-link text-black font-semibold hover:text-yellow-300 transition duration-300 flex items-center @if(request()->routeIs('perfil.editar')) active @endif">
-                                <i class="fas fa-user-graduate mr-2"></i> Perfil
-                            </a></li>
+                            <li><a href="{{ route('perfil.editar', ['id' => Auth::id()]) }}" class="nav-link"><i class="fas fa-user-graduate mr-2"></i> Perfil</a></li>
                         @endif
 
                         @if(Auth::user()->role === 'coach')
-                            <li><a href="{{ route('coach.perfil.show', ['id' => Auth::user()->id]) }}" class="nav-link text-black font-semibold hover:text-yellow-300 transition duration-300 flex items-center">
-                                <i class="fas fa-chalkboard-teacher mobile-nav-icon"></i> Perfil Coach
-                            </a></li>
+                            <li><a href="{{ route('coach.perfil.show', ['id' => Auth::user()->id]) }}" class="nav-link"><i class="fas fa-chalkboard-teacher mobile-nav-icon"></i> Perfil Coach</a></li>
                         @endif
 
                         @if(Auth::user()->role === 'superadmin')
-                            <li><a href="{{ route('users.index') }}" class="nav-link text-black font-semibold hover:text-yellow-300 transition duration-300 flex items-center @if(request()->routeIs('users.index')) active @endif">
-                                <i class="fas fa-cogs mr-2"></i> Configuración
-                            </a></li>
+                            <li><a href="{{ route('users.index') }}" class="nav-link"><i class="fas fa-cogs mr-2"></i> Configuración</a></li>
                         @endif
 
                         <li>
                             <form id="logout-form" action="{{ route('logout.perform') }}" method="POST" class="flex items-center">
                                 @csrf
-                                <button type="submit" class="nav-link text-black font-semibold hover:text-yellow-300 transition duration-300 flex items-center">
-                                    <i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión
-                                </button>
+                                <button type="submit" class="nav-link"><i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión</button>
                             </form>
                         </li>
                     @endif
@@ -203,6 +195,77 @@
             </nav>
         </div>
     </header>
+
+    <style>
+        .text-gradient {
+            background: linear-gradient(45deg, #007bff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-animation 3s ease infinite;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: background-color 0.4s, color 0.4s, box-shadow 0.4s, transform 0.4s;
+        }
+
+        .nav-link:hover {
+            background-color: #007bff;
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .nav-link i {
+            margin-right: 8px;
+            transition: transform 0.4s;
+        }
+
+        .nav-link:hover i {
+            transform: rotate(360deg);
+        }
+    </style>
+
+    <style>
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: background-color 0.4s, color 0.4s, box-shadow 0.4s, transform 0.4s;
+        }
+
+        .nav-link:hover {
+            background-color: #007bff;
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .nav-link i {
+            margin-right: 8px;
+            transition: transform 0.4s;
+        }
+
+        .nav-link:hover i {
+            transform: rotate(360deg);
+        }
+    </style>
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
