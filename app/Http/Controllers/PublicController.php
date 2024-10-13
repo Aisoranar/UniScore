@@ -73,4 +73,9 @@ class PublicController extends Controller
         $estadisticas = Estadistica::with(['jugador', 'jugador.equipo'])->get();
         return view('public.statistics', compact('estadisticas'));
     }
+
+    public function inicio()
+{
+    return view('public.inicio'); // Devuelve la vista de inicio
+}
 }

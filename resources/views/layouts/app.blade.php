@@ -203,8 +203,7 @@
             </div>
             <nav class="menu mt-4 lg:mt-0">
                 <ul class="flex flex-col lg:flex-row items-center lg:items-center gap-4 lg:gap-8 lg:overflow-visible">
-                    <!-- Enlace a la página de inicio -->
-                    <li><a href="{{ route('home.index') }}" class="nav-link"><i class="bi bi-house-door-fill mr-2"></i> Inicio</a></li>
+                    <li><a href="{{ route('public.inicio') }}" class="nav-link"><i class="bi bi-house-door-fill mr-2"></i> Inicio</a></li>
             
                     @guest
                         <!-- Enlaces para usuarios no autenticados (públicos) -->
@@ -215,7 +214,6 @@
                         <li><a href="{{ route('public.results') }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Resultados</a></li>
                         <li><a href="{{ route('public.gallery') }}" class="nav-link"><i class="bi bi-image mr-2"></i> Galería</a></li>
             
-                        <!-- Botón de iniciar sesión -->
                         <li><a href="{{ route('login') }}" class="btn btn-primary"><i class="bi bi-person-fill mr-2"></i> Iniciar Sesión</a></li>
                     @else
                         <!-- Enlaces para usuarios autenticados (admin) -->
@@ -226,7 +224,6 @@
                         <li><a href="{{ route('statistics.index') }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Resultados</a></li>
                         <li><a href="{{ route('galeria.index') }}" class="nav-link"><i class="bi bi-image mr-2"></i> Galería</a></li>
             
-                        <!-- Enlaces según el rol del usuario -->
                         @if(Auth::user()->role === 'trainee')
                             <li><a href="#" class="nav-link"><i class="fas fa-user-graduate mr-2"></i> Perfil</a></li>
                         @elseif(Auth::user()->role === 'coach')
@@ -235,7 +232,6 @@
                             <li><a href="{{ route('users.index') }}" class="nav-link"><i class="fas fa-cogs mr-2"></i> Configuración</a></li>
                         @endif
             
-                        <!-- Botón de cerrar sesión -->
                         <li>
                             <form id="logout-form" action="{{ route('logout.perform') }}" method="POST" class="flex items-center">
                                 @csrf
@@ -245,6 +241,7 @@
                     @endguest
                 </ul>
             </nav>
+                 
             
             
             
