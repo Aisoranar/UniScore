@@ -4,39 +4,38 @@
 <div class="container">
     <h1 class="text-center mb-4 font-weight-bold text-primary" style="font-size: 2.5rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">Estadísticas de Torneos</h1>
 
-    @foreach ($estadisticas as $partidoId => $estadisticasPartido)
-        <div class="card mt-3 shadow-sm rounded border-0">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <h3 class="mb-0">
-                    <i class="fas fa-futbol"></i>
-                    Partido: 
-                    {{ $estadisticasPartido->first()->partido->equipoLocal->name ?? 'Equipo Local No Disponible' }} 
-                    vs 
-                    {{ $estadisticasPartido->first()->partido->equipoVisitante->name ?? 'Equipo Visitante No Disponible' }}
-                </h3>
-                <a href="{{ route('statistics.create') }}" class="btn btn-success btn-sm rounded-pill shadow">
-                    <i class="fas fa-plus-circle"></i> Agregar Estadística
-                </a>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive d-none d-md-block"> <!-- Muestra tabla solo en pantallas grandes -->
-                    <table class="table table-bordered table-striped text-center">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>Jugador</th>
-                                <th>Equipo</th>
-                                <th>Goles</th>
-                                <th>Tarjetas Amarillas</th>
-                                <th>Tarjetas Rojas</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if ($estadisticasPartido->isEmpty())
+    <a href="{{ route('statistics.create') }}" class="btn btn-success mb-3">
+        <i class="fas fa-plus-circle"></i> Agregar Estadística
+    </a>
+
+    @if ($estadisticas->isEmpty())
+        <div class="alert alert-info text-center">No hay estadísticas disponibles. ¡Agrega una nueva estadística!</div>
+    @else
+        @foreach ($estadisticas as $partidoId => $estadisticasPartido)
+            <div class="card mt-3 shadow-sm rounded border-0">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">
+                        <i class="fas fa-futbol"></i>
+                        Partido: 
+                        {{ $estadisticasPartido->first()->partido->equipoLocal->name ?? 'Equipo Local No Disponible' }} 
+                        vs 
+                        {{ $estadisticasPartido->first()->partido->equipoVisitante->name ?? 'Equipo Visitante No Disponible' }}
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive d-none d-md-block"> <!-- Muestra tabla solo en pantallas grandes -->
+                        <table class="table table-bordered table-striped text-center">
+                            <thead class="thead-dark">
                                 <tr>
-                                    <td colspan="6" class="text-center">No hay estadísticas disponibles para este partido.</td>
+                                    <th>Jugador</th>
+                                    <th>Equipo</th>
+                                    <th>Goles</th>
+                                    <th>Tarjetas Amarillas</th>
+                                    <th>Tarjetas Rojas</th>
+                                    <th>Acciones</th>
                                 </tr>
-                            @else
+                            </thead>
+                            <tbody>
                                 @php
                                     $maxGoals = $estadisticasPartido->max('goals'); // Encuentra el máximo de goles
                                 @endphp
@@ -77,19 +76,12 @@
                                         </td>
                                     </tr>
                                 @endforeach
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
 
-                <!-- Vista de tarjetas para dispositivos móviles -->
-                <div class="d-md-none"> <!-- Solo se muestra en pantallas pequeñas -->
-                    @if ($estadisticasPartido->isEmpty())
-                        <div class="alert alert-info text-center">No hay estadísticas disponibles para este partido.</div>
-                    @else
-                        @php
-                            $maxGoals = $estadisticasPartido->max('goals'); // Encuentra el máximo de goles
-                        @endphp
+                    <!-- Vista de tarjetas para dispositivos móviles -->
+                    <div class="d-md-none"> <!-- Solo se muestra en pantallas pequeñas -->
                         @foreach ($estadisticasPartido as $estadistica)
                             <div class="card mb-3 shadow-sm border-0">
                                 <div class="card-body">
@@ -120,10 +112,10 @@
                                 </div>
                             </div>
                         @endforeach
-                    @endif
+                    </div>
                 </div>
             </div>
-        </div>
-    @endforeach
+        @endforeach
+    @endif
 </div>
 @endsection
