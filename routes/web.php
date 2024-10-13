@@ -4,6 +4,7 @@ use App\Http\Controllers\GaleriaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\PublicController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\SuperAdminController;
@@ -224,4 +225,14 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('galeria')->group(functio
     Route::put('/{galeria}', [GaleriaController::class, 'update'])->name('galeria.update'); // Actualiza una galería existente
     Route::get('/{galeria}', [GaleriaController::class, 'show'])->name('galeria.show'); // Muestra una galería específica
     Route::delete('/{galeria}', [GaleriaController::class, 'destroy'])->name('galeria.destroy'); // Elimina una galería
+});
+
+Route::prefix('public')->group(function () {
+    Route::get('/tournaments', [PublicController::class, 'tournaments'])->name('public.tournaments');
+    Route::get('/teams', [PublicController::class, 'teams'])->name('public.teams');
+    Route::get('/players', [PublicController::class, 'players'])->name('public.players');
+    Route::get('/matches', [PublicController::class, 'matches'])->name('public.matches');
+    Route::get('/results', [PublicController::class, 'results'])->name('public.results');
+    Route::get('/statistics', [PublicController::class, 'statistics'])->name('public.statistics');
+    Route::get('/gallery', [PublicController::class, 'gallery'])->name('public.gallery');
 });

@@ -203,40 +203,49 @@
             </div>
             <nav class="menu mt-4 lg:mt-0">
                 <ul class="flex flex-col lg:flex-row items-center lg:items-center gap-4 lg:gap-8 lg:overflow-visible">
+                    <!-- Enlace a la página de inicio -->
                     <li><a href="{{ route('home.index') }}" class="nav-link"><i class="bi bi-house-door-fill mr-2"></i> Inicio</a></li>
-                    <li><a href="{{ route('tournaments.index') }}" class="nav-link"><i class="bi bi-calendar mr-2"></i> Torneos</a></li>
-                    <li><a href="{{ route('teams.index', ['torneo' => 1]) }}" class="nav-link"><i class="bi bi-people-fill mr-2"></i> Equipos</a></li>
-                    <li><a href="{{ route('players.index', ['torneoId' => 1, 'equipoId' => 1]) }}" class="nav-link"><i class="bi bi-list mr-2"></i> Jugadores</a></li>
-                    <li><a href="{{ route('tournaments.matches.index', ['tournament' => 1]) }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Partidos</a></li>
-                    <li><a href="{{ route('statistics.index') }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Resultados</a></li>
-                    <li><a href="{{ route('galeria.index') }}" class="nav-link"><i class="bi bi-image mr-2"></i> Galería</a></li>
             
-                    @if(Auth::check())
+                    @guest
+                        <!-- Enlaces para usuarios no autenticados (públicos) -->
+                        <li><a href="{{ route('public.tournaments') }}" class="nav-link"><i class="bi bi-calendar mr-2"></i> Torneos</a></li>
+                        <li><a href="{{ route('public.teams') }}" class="nav-link"><i class="bi bi-people-fill mr-2"></i> Equipos</a></li>
+                        <li><a href="{{ route('public.players') }}" class="nav-link"><i class="bi bi-list mr-2"></i> Jugadores</a></li>
+                        <li><a href="{{ route('public.matches') }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Partidos</a></li>
+                        <li><a href="{{ route('public.results') }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Resultados</a></li>
+                        <li><a href="{{ route('public.gallery') }}" class="nav-link"><i class="bi bi-image mr-2"></i> Galería</a></li>
+            
+                        <!-- Botón de iniciar sesión -->
+                        <li><a href="{{ route('login') }}" class="btn btn-primary"><i class="bi bi-person-fill mr-2"></i> Iniciar Sesión</a></li>
+                    @else
+                        <!-- Enlaces para usuarios autenticados (admin) -->
+                        <li><a href="{{ route('tournaments.index') }}" class="nav-link"><i class="bi bi-calendar mr-2"></i> Torneos</a></li>
+                        <li><a href="{{ route('teams.index', ['torneo' => 1]) }}" class="nav-link"><i class="bi bi-people-fill mr-2"></i> Equipos</a></li>
+                        <li><a href="{{ route('players.index', ['torneoId' => 1, 'equipoId' => 1]) }}" class="nav-link"><i class="bi bi-list mr-2"></i> Jugadores</a></li>
+                        <li><a href="{{ route('tournaments.matches.index', ['tournament' => 1]) }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Partidos</a></li>
+                        <li><a href="{{ route('statistics.index') }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Resultados</a></li>
+                        <li><a href="{{ route('galeria.index') }}" class="nav-link"><i class="bi bi-image mr-2"></i> Galería</a></li>
+            
+                        <!-- Enlaces según el rol del usuario -->
                         @if(Auth::user()->role === 'trainee')
                             <li><a href="#" class="nav-link"><i class="fas fa-user-graduate mr-2"></i> Perfil</a></li>
-                        @endif
-            
-                        @if(Auth::user()->role === 'coach')
+                        @elseif(Auth::user()->role === 'coach')
                             <li><a href="{{ route('coach.perfil.show', ['id' => Auth::user()->id]) }}" class="nav-link"><i class="fas fa-chalkboard-teacher mr-2"></i> Perfil Coach</a></li>
-                        @endif
-            
-                        @if(Auth::user()->role === 'superadmin')
+                        @elseif(Auth::user()->role === 'superadmin')
                             <li><a href="{{ route('users.index') }}" class="nav-link"><i class="fas fa-cogs mr-2"></i> Configuración</a></li>
                         @endif
             
+                        <!-- Botón de cerrar sesión -->
                         <li>
                             <form id="logout-form" action="{{ route('logout.perform') }}" method="POST" class="flex items-center">
                                 @csrf
                                 <button type="submit" class="nav-link"><i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión</button>
                             </form>
                         </li>
-                    @endif
-                    
-                    @guest
-                        <li><a href="{{ route('login') }}" class="btn btn-primary"><i class="bi bi-person-fill mr-2"></i> Iniciar Sesión</a></li>
                     @endguest
                 </ul>
             </nav>
+            
             
             
         </div>
