@@ -3,92 +3,74 @@
 namespace App\Http\Controllers;
 
 use App\Models\Estadistica;
-use App\Models\Jugador;
 use App\Models\Partido;
+use App\Models\Jugador;
 use Illuminate\Http\Request;
 
 class StatisticController extends Controller
 {
-    // Listar estadísticas del partido
-    public function index(Partido $partido)
+    public function index()
     {
-        if (!isset($partido->equipo_local_id) || !isset($partido->equipo_visitante_id)) {
-            return redirect()->back()->withErrors('El partido no tiene equipos asignados.');
-        }
-
-        $estadisticas = Estadistica::with('jugador.equipo')
-            ->where('partido_id', $partido->id)
-            ->get();
-
-        $jugadores = Jugador::whereIn('equipo_id', [$partido->equipo_local_id, $partido->equipo_visitante_id])
-            ->with('equipo')
-            ->get();
-
-        return view('admin.statistics.index', compact('estadisticas', 'partido', 'jugadores'));
+        // Cargamos las estadísticas con las relaciones necesarias.
+        $estadisticas = Estadistica::with(['jugador', 'jugador.equipo', 'partido.equipoLocal', 'partido.equipoVisitante'])
+            ->get()
+            ->groupBy('partido_id'); // Agrupamos solo por partido_id
+    
+        // Devolver la vista con las estadísticas agrupadas.
+        return view('admin.statistics.index', compact('estadisticas'));
     }
 
-    // Crear nuevas estadísticas para un partido
-    public function create(Partido $partido)
+    public function create()
     {
-        if (!isset($partido->equipo_local_id) || !isset($partido->equipo_visitante_id)) {
-            return redirect()->back()->withErrors('El partido no tiene equipos asignados.');
-        }
-
-        $jugadores = Jugador::whereIn('equipo_id', [$partido->equipo_local_id, $partido->equipo_visitante_id])
-            ->with('equipo')
-            ->get();
-
-        return view('admin.statistics.create', compact('partido', 'jugadores'));
+        $jugadores = Jugador::all();
+        $partidos = Partido::all();
+        return view('admin.statistics.create', compact('jugadores', 'partidos'));
     }
 
-    // Guardar una nueva estadística
-    public function store(Request $request, Partido $partido)
+    public function store(Request $request)
     {
         $request->validate([
             'jugador_id' => 'required|exists:jugadores,id',
-            'goals' => 'nullable|integer',
-            'yellow_cards' => 'nullable|integer',
-            'red_cards' => 'nullable|integer',
+            'partido_id' => 'required|exists:partidos,id',
+            'goals' => 'required|integer|min:0',
+            'yellow_cards' => 'required|integer|min:0',
+            'red_cards' => 'required|integer|min:0',
         ]);
 
-        $partido->estadisticas()->create($request->all());
+        Estadistica::create($request->all());
 
-        return redirect()->route('admin.matches.statistics.index', ['match' => $partido->id])
-            ->with('success', 'Estadística creada con éxito.');
+        return redirect()->route('statistics.index')->with('success', 'Estadística agregada correctamente.');
     }
 
-    // Editar estadísticas de un partido
-    public function edit(Partido $partido, Estadistica $estadistica)
+    public function edit($id)
     {
-        $jugadores = Jugador::whereIn('equipo_id', [$partido->equipo_local_id, $partido->equipo_visitante_id])
-            ->with('equipo')
-            ->get();
-
-        return view('admin.statistics.edit', compact('partido', 'estadistica', 'jugadores'));
+        $estadistica = Estadistica::findOrFail($id);
+        $jugadores = Jugador::all();
+        $partidos = Partido::all();
+        return view('admin.statistics.edit', compact('estadistica', 'jugadores', 'partidos'));
     }
 
-    // Actualizar una estadística
-    public function update(Request $request, Partido $partido, Estadistica $estadistica)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'jugador_id' => 'required|exists:jugadores,id',
-            'goals' => 'nullable|integer',
-            'yellow_cards' => 'nullable|integer',
-            'red_cards' => 'nullable|integer',
+            'partido_id' => 'required|exists:partidos,id',
+            'goals' => 'required|integer|min:0',
+            'yellow_cards' => 'required|integer|min:0',
+            'red_cards' => 'required|integer|min:0',
         ]);
 
+        $estadistica = Estadistica::findOrFail($id);
         $estadistica->update($request->all());
 
-        return redirect()->route('admin.matches.statistics.index', ['match' => $partido->id])
-            ->with('success', 'Estadística actualizada con éxito.');
+        return redirect()->route('statistics.index')->with('success', 'Estadística actualizada correctamente.');
     }
 
-    // Eliminar una estadística
-    public function destroy(Partido $partido, Estadistica $estadistica)
+    public function destroy($id)
     {
+        $estadistica = Estadistica::findOrFail($id);
         $estadistica->delete();
 
-        return redirect()->route('admin.matches.statistics.index', ['match' => $partido->id])
-            ->with('success', 'Estadística eliminada con éxito.');
+        return redirect()->route('statistics.index')->with('success', 'Estadística eliminada correctamente.');
     }
 }

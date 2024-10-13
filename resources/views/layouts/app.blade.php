@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-DyZvBRr2kT4bsJtH7BYcI2Wz04duyoDQ8cQHEhB21g56nbYLBtH/pJ/5ALcEmW9g" crossorigin="anonymous">
+
 
     <style>
         /* Estilo general del navbar */
@@ -206,7 +208,7 @@
                     <li><a href="{{ route('teams.index', ['torneo' => 1]) }}" class="nav-link"><i class="bi bi-people-fill mr-2"></i> Equipos</a></li>
                     <li><a href="{{ route('players.index', ['torneoId' => 1, 'equipoId' => 1]) }}" class="nav-link"><i class="bi bi-list mr-2"></i> Jugadores</a></li>
                     <li><a href="{{ route('tournaments.matches.index', ['tournament' => 1]) }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Partidos</a></li>
-                    <li><a href="{{ route('admin.matches.statistics.index', ['match' => 1]) }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Estadística</a></li>
+                    <li><a href="{{ route('statistics.index') }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Resultados</a></li>
                     <li><a href="#" class="nav-link"><i class="bi bi-image mr-2"></i> Galería</a></li>
             
                     @if(Auth::check())

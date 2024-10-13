@@ -149,21 +149,9 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
     Route::resource('tournaments.matches', MatchController::class)->shallow();
 
     // CRUD de Estadísticas por Partido
-    Route::resource('matches.statistics', StatisticController::class)->shallow();
-    Route::prefix('tournaments')->group(function () {
-        Route::resource('matches', MatchController::class)->except(['index', 'show']);
-    });
-    Route::get('/admin/partidos/{match}/estadisticas', [StatisticController::class, 'index'])->name('admin.matches.statistics.index');
-
-    // Rutas para gestionar estadísticas de los partidos
-    Route::prefix('admin')->name('admin.matches.statistics.')->group(function () {
-        Route::get('matches/{match}/statistics', [StatisticController::class, 'index'])->name('index');
-        Route::get('matches/{match}/statistics/create', [StatisticController::class, 'create'])->name('create');
-        Route::post('matches/{match}/statistics', [StatisticController::class, 'store'])->name('store');
-        Route::get('matches/{match}/statistics/{estadistica}/edit', [StatisticController::class, 'edit'])->name('edit');
-        Route::put('matches/{match}/statistics/{estadistica}', [StatisticController::class, 'update'])->name('update');
-        Route::delete('matches/{match}/statistics/{estadistica}', [StatisticController::class, 'destroy'])->name('destroy');
-    });
+    Route::resource('statistics', StatisticController::class)->parameters([
+        'statistics' => 'estadistica'
+    ])->shallow();
 
     // Ruta para crear un partido
     Route::get('tournaments/{torneo}/teams/{equipo}/players', [PlayerController::class, 'index'])
