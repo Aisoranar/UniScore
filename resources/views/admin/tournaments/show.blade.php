@@ -33,14 +33,18 @@
                     </li>
                 @endforeach
             @endif
-        </ul>
-
-        <h3 class="text-lg font-semibold mb-2">Partidos</h3>
-        <ul class="list-disc list-inside text-sm">
-            @foreach($torneo->partidos as $partido)
-                <li>{{ $partido->equipo_local->name }} vs {{ $partido->equipo_visitante->name }} - {{ $partido->match_date }} {{ $partido->match_time }}</li>
-            @endforeach
-        </ul>
+            <ul class="list-disc list-inside text-sm">
+                @foreach($torneo->partidos as $partido)
+                    <li>
+                        @if($partido->equipo_local && $partido->equipo_visitante)
+                            {{ $partido->equipo_local->name }} vs {{ $partido->equipo_visitante->name }} - {{ $partido->match_date }} {{ $partido->match_time }}
+                        @else
+                            Partido no tiene equipos asignados.
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
+            
     </div>
 </div>
 @endsection
