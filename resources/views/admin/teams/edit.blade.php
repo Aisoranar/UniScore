@@ -8,13 +8,12 @@
     @method('PUT')
     <div class="form-group">
         <label for="name">Nombre del Equipo</label>
-        <input type="text" name="name" class="form-control" value="{{ $equipo->name }}" required>
+        <input type="text" name="name" class="form-control" value="{{ old('name', $equipo->name) }}" required>
     </div>
     <div class="form-group">
         <label for="coach">Nombre del Coach</label>
-        <input type="text" name="coach" class="form-control" value="{{ $equipo->coach }}">
+        <input type="text" name="coach" class="form-control" value="{{ old('coach', $equipo->coach) }}">
     </div>
     <button type="submit" class="btn btn-success">Actualizar</button>
 </form>
-
 @endsection

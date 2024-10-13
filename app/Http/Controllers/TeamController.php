@@ -19,40 +19,39 @@ class TeamController extends Controller
 
     // Formulario para registrar un nuevo equipo
     public function create($torneoId)
-{
-    $torneo = Torneo::findOrFail($torneoId); // Obteniendo el torneo específico
-    $torneos = Torneo::all(); // Obteniendo todos los torneos (si es necesario)
+    {
+        $torneo = Torneo::findOrFail($torneoId);
 
-    // Verificar si se alcanzó el número máximo de equipos
-    if ($torneo->equipos->count() >= $torneo->number_of_teams) {
-        return redirect()->route('teams.index', $torneoId)
-                         ->with('error', 'No se pueden registrar más equipos en este torneo.');
+        // Verificar si se alcanzó el número máximo de equipos
+        if ($torneo->equipos->count() >= $torneo->number_of_teams) {
+            return redirect()->route('teams.index', $torneoId)
+                             ->with('error', 'No se pueden registrar más equipos en este torneo.');
+        }
+
+        return view('admin.teams.create', compact('torneo'));
     }
-
-    return view('admin.teams.create', compact('torneo', 'torneos')); // Pasando ambas variables a la vista
-}
 
     // Guardar el nuevo equipo y asociarlo al torneo
     public function store(Request $request, $torneoId)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'coach' => 'nullable|string|max:255',
-    ]);
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'coach' => 'nullable|string|max:255',
+        ]);
 
-    $torneo = Torneo::findOrFail($torneoId);
+        $torneo = Torneo::findOrFail($torneoId);
 
-    // Verificar si se alcanzó el número máximo de equipos
-    if ($torneo->equipos->count() >= $torneo->number_of_teams) {
+        // Verificar si se alcanzó el número máximo de equipos
+        if ($torneo->equipos->count() >= $torneo->number_of_teams) {
+            return redirect()->route('teams.index', $torneoId)
+                             ->with('error', 'No se pueden registrar más equipos en este torneo.');
+        }
+
+        $torneo->equipos()->create($request->only(['name', 'coach']));
+
         return redirect()->route('teams.index', $torneoId)
-                         ->with('error', 'No se pueden registrar más equipos en este torneo.');
+                         ->with('success', 'Equipo registrado con éxito.');
     }
-
-    $torneo->equipos()->create($request->all());
-
-    return redirect()->route('teams.index', $torneoId)
-                     ->with('success', 'Equipo registrado con éxito.');
-}
 
     // Formulario para editar un equipo
     public function edit($torneoId, $equipoId)
@@ -72,7 +71,7 @@ class TeamController extends Controller
         ]);
 
         $equipo = Equipo::where('torneo_id', $torneoId)->findOrFail($equipoId);
-        $equipo->update($request->all());
+        $equipo->update($request->only(['name', 'coach']));
 
         return redirect()->route('teams.index', $torneoId)
                          ->with('success', 'Equipo actualizado con éxito.');

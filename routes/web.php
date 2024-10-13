@@ -90,6 +90,8 @@ Route::middleware(['auth'])->prefix('profile')->group(function () {
 });
 
 
+
+
 // Ruta para mostrar el home de usuarios autenticados
 Route::get('/home', [HomeController::class, 'index'])
     ->name('home.index')
@@ -139,11 +141,22 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
     
     // CRUD de Equipos por Torneo
     Route::resource('tournaments.teams', TeamController::class)->shallow();
+    Route::get('admin/torneos/{torneo}/equipos/crear', [TeamController::class, 'create'])
+    ->name('teams.create');
+
     Route::get('admin/torneos/{torneo}/equipos/crear', [TeamController::class, 'create'])->name('teams.create');
 
     
     // CRUD de Jugadores por Equipo
+    // Rutas para gestionar equipos de un torneo
+    Route::get('torneos/{torneo}/equipos', [TeamController::class, 'index'])->name('teams.index');
+    Route::get('torneos/{torneo}/equipos/create', [TeamController::class, 'create'])->name('teams.create');
+    Route::post('torneos/{torneo}/equipos', [TeamController::class, 'store'])->name('teams.store');
+    Route::get('torneos/{torneo}/equipos/{equipo}/edit', [TeamController::class, 'edit'])->name('teams.edit');
+    Route::put('torneos/{torneo}/equipos/{equipo}', [TeamController::class, 'update'])->name('teams.update');
+    Route::delete('torneos/{torneo}/equipos/{equipo}', [TeamController::class, 'destroy'])->name('teams.destroy');
     Route::resource('teams.players', PlayerController::class)->shallow();
+    
 
     // CRUD de Partidos por Torneo
     Route::resource('tournaments.matches', MatchController::class)->shallow();
