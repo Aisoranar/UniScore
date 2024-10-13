@@ -136,6 +136,14 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
     
     // CRUD de Jugadores por Equipo
     Route::resource('teams.players', PlayerController::class)->shallow();
+    // Rutas para gestionar los jugadores
+    Route::get('admin/torneos/{torneo}/equipos/{equipo}/players/create', [PlayerController::class, 'create'])->name('players.create');
+    Route::post('admin/torneos/{torneo}/equipos/{equipo}/players', [PlayerController::class, 'store'])->name('players.store');
+    Route::get('admin/torneos/{torneo}/equipos/{equipo}/players/{jugador}/edit', [PlayerController::class, 'edit'])->name('players.edit');
+    Route::put('admin/torneos/{torneo}/equipos/{equipo}/players/{jugador}', [PlayerController::class, 'update'])->name('players.update');
+    Route::delete('admin/torneos/{torneo}/equipos/{equipo}/players/{jugador}', [PlayerController::class, 'destroy'])->name('players.destroy');
+    Route::get('admin/torneos/{torneo}/equipos/{equipo}/players', [PlayerController::class, 'index'])->name('players.index');
+
 
     // CRUD de Partidos por Torneo
     Route::resource('tournaments.matches', MatchController::class)->shallow();
@@ -153,3 +161,4 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
         Route::delete('/{equipo}', [TeamController::class, 'destroy'])->name('teams.destroy');
     });
 });
+

@@ -16,13 +16,13 @@ class Jugador extends Model
         'position',
     ];
 
-    // Relación con Equipo
+    // Relación con el modelo Equipo
     public function equipo()
     {
         return $this->belongsTo(Equipo::class);
     }
 
-    // Relación con Estadísticas
+    // Relación con el modelo Estadistica
     public function estadisticas()
     {
         return $this->hasMany(Estadistica::class);

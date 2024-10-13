@@ -20,25 +20,25 @@ class Partido extends Model
         'location',
     ];
 
-    // Relación con Torneo
+    // Relación con el modelo Torneo
     public function torneo()
     {
         return $this->belongsTo(Torneo::class);
     }
 
-    // Relación con Equipo Local
+    // Relación con el equipo local
     public function equipoLocal()
     {
         return $this->belongsTo(Equipo::class, 'equipo_local_id');
     }
 
-    // Relación con Equipo Visitante
+    // Relación con el equipo visitante
     public function equipoVisitante()
     {
         return $this->belongsTo(Equipo::class, 'equipo_visitante_id');
     }
 
-    // Relación con Estadísticas
+    // Relación con el modelo Estadistica
     public function estadisticas()
     {
         return $this->hasMany(Estadistica::class);

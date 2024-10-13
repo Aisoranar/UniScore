@@ -9,10 +9,9 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
 
-
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     protected $fillable = [
         'first_name',
@@ -38,7 +37,6 @@ class User extends Authenticatable
     // Mutador para encriptar la contraseña automáticamente antes de guardarla
     public function setPasswordAttribute($value)
     {
-        // Solo encripta la contraseña si no está ya encriptada
         $this->attributes['password'] = Hash::needsRehash($value) ? bcrypt($value) : $value;
     }
 
@@ -51,13 +49,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // Relación con ProfileCoach
+    // Relación con el modelo ProfileCoach
     public function profileCoach()
     {
         return $this->hasOne(ProfileCoach::class);
     }
 
-    // Relación con ProfileTrainee
+    // Relación con el modelo ProfileTrainee
     public function profileTrainee()
     {
         return $this->hasOne(ProfileTrainee::class);
