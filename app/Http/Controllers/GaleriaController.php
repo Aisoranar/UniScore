@@ -28,8 +28,10 @@ class GaleriaController extends Controller
             'type' => 'required|in:photo,video',
         ]);
 
+        // Guarda la imagen o video en el almacenamiento
         $path = $request->file('file_path')->store('galeria', 'public');
 
+        // Crea la entrada en la base de datos
         Galeria::create([
             'title' => $request->title,
             'description' => $request->description,

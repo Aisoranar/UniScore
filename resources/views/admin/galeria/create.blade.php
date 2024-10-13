@@ -24,7 +24,7 @@
                 <option value="video">Video</option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Agregar</button>
+        <button type="submit" class="btn btn-success">Crear Galería</button>
     </form>
 </div>
 @endsection
