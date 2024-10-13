@@ -1,6 +1,6 @@
 @extends('layouts.app-master')
 
-@section('title', 'Editar Perfil Estudiante')
+@section('title', 'Perfil del Estudiante')
 
 @section('content')
 <div class="container mx-auto py-8">

@@ -83,13 +83,13 @@ Route::middleware('auth')->group(function () {
     
 });
 
-Route::middleware(['auth'])->prefix('profile')->group(function () {
-    Route::get('/{id}', [TraineeController::class, 'show'])
-        ->name('profile.show');
-    Route::put('/{user_id}', [TraineeController::class, 'update'])
-        ->name('profile.update');
+// Rutas para el perfil de los trainees
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/{user_id}', [TraineeController::class, 'show'])->name('profile.show');
+    Route::get('/trainees', [TraineeController::class, 'index'])->name('trainees.index');
+    Route::get('/trainees/edit/{id}', [TraineeController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update/{user_id}', [TraineeController::class, 'update'])->name('profile.update');
 });
-
 
 // Ruta para mostrar el home de usuarios autenticados
 Route::get('/home', [HomeController::class, 'index'])

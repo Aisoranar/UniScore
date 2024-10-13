@@ -213,7 +213,7 @@
             
                     @if(Auth::check())
                         @if(Auth::user()->role === 'trainee')
-                            <li><a href="{{ route('perfil.editar', ['id' => Auth::id()]) }}" class="nav-link"><i class="fas fa-user-graduate mr-2"></i> Perfil</a></li>
+                            <li><a href="#" class="nav-link"><i class="fas fa-user-graduate mr-2"></i> Perfil</a></li>
                         @endif
             
                         @if(Auth::user()->role === 'coach')

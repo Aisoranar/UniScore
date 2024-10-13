@@ -10,7 +10,7 @@ class TraineeController extends Controller
     public function show($user_id)
     {
         // Muestra el user_id que estás buscando para depuración
-        dd($user_id);
+        // dd($user_id);
     
         // Busca el perfil del trainee usando el user_id
         $profile = ProfileTrainee::where('user_id', $user_id)->first();
@@ -25,13 +25,6 @@ class TraineeController extends Controller
             ]
         ]);
     }
-    
-    
-    
-
-
-
-
 
     public function index()
     {
@@ -44,47 +37,37 @@ class TraineeController extends Controller
     }
 
     public function edit($id)
-{
-    // Agrega un dd para verificar el ID
+    {
+        // Busca el perfil del trainee usando el ID
+        $profile = ProfileTrainee::where('user_id', $id)->first(); 
 
-    // Busca el perfil del trainee usando el ID
-    $profile = ProfileTrainee::where('user_id', $id)->first(); 
+        if (!$profile) {
+            abort(404, 'Perfil no encontrado');
+        }
 
-    // Debug para verificar el perfil
-    dd($profile); // Esto te mostrará el contenido del perfil
-
-    if (!$profile) {
-        abort(404, 'Perfil no encontrado');
+        return view('view.trainee.edit', compact('profile'));
     }
 
-    return view('view.trainee.edit', compact('profile'));
-}
+    public function update(Request $request, $user_id)
+    {
+        $profile = ProfileTrainee::where('user_id', $user_id)->first();
 
+        if (!$profile) {
+            return redirect()->back()->withErrors(['message' => 'Perfil no encontrado']);
+        }
 
+        // Validar los datos
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
+            'position' => 'nullable|string|max:255',
+            'experience_level' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:15',
+        ]);
 
+        // Actualizar el perfil
+        $profile->update($validatedData);
 
-
-public function update(Request $request, $user_id)
-{
-    $profile = ProfileTrainee::where('user_id', $user_id)->first();
-
-    if (!$profile) {
-        return redirect()->back()->withErrors(['message' => 'Perfil no encontrado']);
+        return redirect()->route('profile.show', $user_id)->with('success', 'Perfil actualizado exitosamente.');
     }
-
-    // Validar los datos
-    $validatedData = $request->validate([
-        'name' => 'required|string|max:255',
-        'surname' => 'required|string|max:255',
-        'position' => 'nullable|string|max:255',
-        'experience_level' => 'nullable|string|max:255',
-        'phone' => 'nullable|string|max:15',
-    ]);
-
-    // Actualizar el perfil
-    $profile->update($validatedData);
-
-    return redirect()->route('profile.show', $user_id)->with('success', 'Perfil actualizado exitosamente.');
-}
-
 }
