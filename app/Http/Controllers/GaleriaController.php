@@ -57,10 +57,12 @@ class GaleriaController extends Controller
 
         $galeria->title = $request->title;
         $galeria->description = $request->description;
+
         if ($request->hasFile('file_path')) {
             $path = $request->file('file_path')->store('galeria', 'public');
             $galeria->file_path = $path;
         }
+
         $galeria->type = $request->type;
         $galeria->save();
 

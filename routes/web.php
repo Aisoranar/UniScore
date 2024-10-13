@@ -217,5 +217,11 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
 });
 // Rutas para la gestión de la galería
 Route::middleware(['auth', 'role:superadmin'])->prefix('galeria')->group(function () {
-    Route::resource('/', GaleriaController::class)->names('galeria');
+    Route::get('/', [GaleriaController::class, 'index'])->name('galeria.index'); // Lista todas las galerías
+    Route::get('/create', [GaleriaController::class, 'create'])->name('galeria.create'); // Muestra el formulario para crear una nueva galería
+    Route::post('/', [GaleriaController::class, 'store'])->name('galeria.store'); // Almacena una nueva galería
+    Route::get('/{galeria}/edit', [GaleriaController::class, 'edit'])->name('galeria.edit'); // Muestra el formulario para editar una galería
+    Route::put('/{galeria}', [GaleriaController::class, 'update'])->name('galeria.update'); // Actualiza una galería existente
+    Route::get('/{galeria}', [GaleriaController::class, 'show'])->name('galeria.show'); // Muestra una galería específica
+    Route::delete('/{galeria}', [GaleriaController::class, 'destroy'])->name('galeria.destroy'); // Elimina una galería
 });
