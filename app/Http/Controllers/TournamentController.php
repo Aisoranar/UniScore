@@ -45,9 +45,6 @@ class TournamentController extends Controller
 
 
 
-
-
-
     public function edit($id)
 {
     $torneo = Torneo::findOrFail($id);
@@ -55,8 +52,12 @@ class TournamentController extends Controller
 }
 
 
-public function update(Request $request, Torneo $torneo)
+public function update(Request $request, $id)
 {
+    // Encuentra el torneo por ID
+    $torneo = Torneo::findOrFail($id);
+
+    // Validar los datos del formulario
     $request->validate([
         'name' => 'required|string|max:255',
         'sport_type' => 'required|string|max:255',
@@ -76,8 +77,10 @@ public function update(Request $request, Torneo $torneo)
         'end_date'
     ]));
 
+    // Redirige a la lista de torneos con un mensaje de éxito
     return redirect()->route('tournaments.index')->with('success', 'Torneo actualizado con éxito.');
 }
+
 
 
     public function destroy(Torneo $torneo)
