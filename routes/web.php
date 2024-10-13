@@ -7,7 +7,6 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\SuperAdminController;
 use App\Http\Controllers\CoachController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileCoachController;
 use App\Http\Controllers\TraineeController;
 use App\Http\Controllers\TournamentController;
@@ -15,6 +14,7 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\MatchController;
 use App\Http\Controllers\StatisticController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -136,14 +136,6 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
     
     // CRUD de Jugadores por Equipo
     Route::resource('teams.players', PlayerController::class)->shallow();
-    // Rutas para gestionar los jugadores
-    Route::get('admin/torneos/{torneo}/equipos/{equipo}/players/create', [PlayerController::class, 'create'])->name('players.create');
-    Route::post('admin/torneos/{torneo}/equipos/{equipo}/players', [PlayerController::class, 'store'])->name('players.store');
-    Route::get('admin/torneos/{torneo}/equipos/{equipo}/players/{jugador}/edit', [PlayerController::class, 'edit'])->name('players.edit');
-    Route::put('admin/torneos/{torneo}/equipos/{equipo}/players/{jugador}', [PlayerController::class, 'update'])->name('players.update');
-    Route::delete('admin/torneos/{torneo}/equipos/{equipo}/players/{jugador}', [PlayerController::class, 'destroy'])->name('players.destroy');
-    Route::get('admin/torneos/{torneo}/equipos/{equipo}/players', [PlayerController::class, 'index'])->name('players.index');
-
 
     // CRUD de Partidos por Torneo
     Route::resource('tournaments.matches', MatchController::class)->shallow();
@@ -159,6 +151,21 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
         Route::get('/{equipo}/editar', [TeamController::class, 'edit'])->name('teams.edit');
         Route::put('/{equipo}', [TeamController::class, 'update'])->name('teams.update');
         Route::delete('/{equipo}', [TeamController::class, 'destroy'])->name('teams.destroy');
+        Route::resource('torneos.equipos.jugadores', PlayerController::class)->parameters([
+            'torneos' => 'torneo',
+            'equipos' => 'equipo',
+            'jugadores' => 'jugador',
+        ]);
+        
+    });
+
+    // Rutas para gestionar los jugadores
+    Route::prefix('torneos/{torneo}/equipos/{equipo}/players')->group(function () {
+        Route::get('/create', [PlayerController::class, 'create'])->name('players.create');
+        Route::post('/', [PlayerController::class, 'store'])->name('players.store');
+        Route::get('/{jugador}/edit', [PlayerController::class, 'edit'])->name('players.edit');
+        Route::put('/{jugador}', [PlayerController::class, 'update'])->name('players.update');
+        Route::delete('/{jugador}', [PlayerController::class, 'destroy'])->name('players.destroy');
+        Route::get('/', [PlayerController::class, 'index'])->name('players.index');
     });
 });
-

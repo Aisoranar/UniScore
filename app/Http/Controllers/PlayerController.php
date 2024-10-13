@@ -9,9 +9,12 @@ use Illuminate\Http\Request;
 
 class PlayerController extends Controller
 {
-    public function index(Torneo $torneo, Equipo $equipo)
+    public function index($torneoId, $equipoId)
     {
+        $torneo = Torneo::findOrFail($torneoId);
+        $equipo = Equipo::with('jugadores')->findOrFail($equipoId);
         $jugadores = $equipo->jugadores;
+
         return view('admin.players.index', compact('torneo', 'equipo', 'jugadores'));
     }
 
@@ -29,6 +32,7 @@ class PlayerController extends Controller
         ]);
 
         $equipo->jugadores()->create($request->all());
+
         return redirect()->route('players.index', ['torneo' => $torneo->id, 'equipo' => $equipo->id])
                          ->with('success', 'Jugador creado con éxito.');
     }
@@ -47,6 +51,7 @@ class PlayerController extends Controller
         ]);
 
         $jugador->update($request->all());
+
         return redirect()->route('players.index', ['torneo' => $torneo->id, 'equipo' => $equipo->id])
                          ->with('success', 'Jugador actualizado con éxito.');
     }
@@ -54,6 +59,7 @@ class PlayerController extends Controller
     public function destroy(Torneo $torneo, Equipo $equipo, Jugador $jugador)
     {
         $jugador->delete();
+
         return redirect()->route('players.index', ['torneo' => $torneo->id, 'equipo' => $equipo->id])
                          ->with('success', 'Jugador eliminado con éxito.');
     }

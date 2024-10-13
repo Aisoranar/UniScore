@@ -1,7 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>Jugadores del Equipo: {{ $equipo->name }}</h1>
+<h2>Jugadores del Equipo: {{ $equipo->name }} - Torneo: {{ $torneo->name }}</h2>
+
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
 <a href="{{ route('players.create', ['torneo' => $torneo->id, 'equipo' => $equipo->id]) }}" class="btn btn-primary">Agregar Jugador</a>
 
 <table class="table">
@@ -14,7 +21,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($jugadores as $jugador)
+        @forelse($jugadores as $jugador)
             <tr>
                 <td>{{ $jugador->name }}</td>
                 <td>{{ $jugador->number }}</td>
@@ -28,7 +35,11 @@
                     </form>
                 </td>
             </tr>
-        @endforeach
+        @empty
+            <tr>
+                <td colspan="4">No hay jugadores registrados en este equipo.</td>
+            </tr>
+        @endforelse
     </tbody>
 </table>
 @endsection

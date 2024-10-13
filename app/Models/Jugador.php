@@ -22,7 +22,7 @@ class Jugador extends Model
         return $this->belongsTo(Equipo::class);
     }
 
-    // Relación con el modelo Estadistica
+    // Relación con el modelo Estadistica (si aplica)
     public function estadisticas()
     {
         return $this->hasMany(Estadistica::class);
