@@ -35,9 +35,12 @@ class PublicController extends Controller
     public function players()
     {
         $jugadores = Jugador::with('equipo')->get();
-        return view('public.players', compact('jugadores'));
+        $equipos = Equipo::all(); // Assuming you have an Equipo model for teams
+        $torneo = Torneo::first(); // Replace with your logic to get the specific tournament
+        return view('public.players', compact('jugadores', 'equipos', 'torneo'));
     }
-
+    
+    
     /**
      * Mostrar la vista de las estadísticas.
      */
