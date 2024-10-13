@@ -209,7 +209,7 @@
                     <li><a href="{{ route('players.index', ['torneoId' => 1, 'equipoId' => 1]) }}" class="nav-link"><i class="bi bi-list mr-2"></i> Jugadores</a></li>
                     <li><a href="{{ route('tournaments.matches.index', ['tournament' => 1]) }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Partidos</a></li>
                     <li><a href="{{ route('statistics.index') }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Resultados</a></li>
-                    <li><a href="#" class="nav-link"><i class="bi bi-image mr-2"></i> Galería</a></li>
+                    <li><a href="{{ route('galeria.index') }}" class="nav-link"><i class="bi bi-image mr-2"></i> Galería</a></li>
             
                     @if(Auth::check())
                         @if(Auth::user()->role === 'trainee')

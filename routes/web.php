@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GaleriaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
@@ -213,4 +214,8 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
     // Ruta para eliminar un jugador
     Route::delete('tournaments/{torneoId}/teams/{equipoId}/players/{jugadorId}', [PlayerController::class, 'destroy'])
         ->name('players.destroy');
+});
+// Rutas para la gestión de la galería
+Route::middleware(['auth', 'role:superadmin'])->prefix('galeria')->group(function () {
+    Route::resource('/', GaleriaController::class)->names('galeria');
 });
