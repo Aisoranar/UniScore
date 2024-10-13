@@ -9,10 +9,8 @@ class Jugador extends Model
 {
     use HasFactory;
 
-    // Especificar el nombre correcto de la tabla
-    protected $table = 'jugadores';
+    protected $table = 'jugadores'; // Nombre correcto de la tabla
 
-    // Definir los campos que se pueden asignar masivamente
     protected $fillable = [
         'name',
         'equipo_id',
@@ -20,13 +18,19 @@ class Jugador extends Model
         'position',
     ];
 
-    // Relación con el modelo Equipo
+    /**
+     * Relación con el modelo Equipo
+     * Un jugador pertenece a un equipo.
+     */
     public function equipo()
     {
         return $this->belongsTo(Equipo::class);
     }
 
-    // Relación con el modelo Estadistica (si aplica)
+    /**
+     * Relación con el modelo Estadistica
+     * Un jugador tiene muchas estadísticas.
+     */
     public function estadisticas()
     {
         return $this->hasMany(Estadistica::class);

@@ -18,11 +18,19 @@ class Torneo extends Model
         'end_date',
     ];
 
+    /**
+     * Relación con el modelo Equipo
+     * Un torneo tiene muchos equipos.
+     */
     public function equipos()
     {
         return $this->hasMany(Equipo::class);
     }
 
+    /**
+     * Relación con el modelo Partido
+     * Un torneo tiene muchos partidos.
+     */
     public function partidos()
     {
         return $this->hasMany(Partido::class);

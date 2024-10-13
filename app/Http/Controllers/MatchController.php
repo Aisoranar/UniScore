@@ -17,80 +17,79 @@ class MatchController extends Controller
     }
 
     public function create(Torneo $tournament)
-{
-    // Cargar los equipos asociados al torneo
-    $tournament->load('equipos');
+    {
+        $tournament->load('equipos');
 
-    // Validar si hay equipos disponibles
-    if ($tournament->equipos->isEmpty()) {
-        return redirect()->back()->with('error', 'No hay equipos disponibles para programar un partido.');
+        if ($tournament->equipos->isEmpty()) {
+            return redirect()->back()->with('error', 'No hay equipos disponibles para programar un partido.');
+        }
+
+        return view('admin.matches.create', compact('tournament'));
     }
 
-    // Mostrar la vista de creación de partido con el torneo y sus equipos
-    return view('admin.matches.create', compact('tournament'));
-}
-
-
-    public function store(Request $request, Torneo $torneo)
+    public function store(Request $request, Torneo $tournament)
     {
-        // Verificar que los datos están llegando correctamente
-        // dd($request->all());
-
-        // Validar los datos del formulario
         $request->validate([
             'equipo_local_id' => 'required|exists:equipos,id',
             'equipo_visitante_id' => 'required|exists:equipos,id|different:equipo_local_id',
-            'match_date' => 'required|date',
-            'match_time' => 'required',
-            'location' => 'nullable|string|max:255',
+            'fecha' => 'required|date',
+            'hora' => 'required',
+            'ubicacion' => 'nullable|string|max:255',
         ]);
 
-        // Crear el partido asociado al torneo
-        $torneo->partidos()->create([
+        $tournament->partidos()->create([
             'equipo_local_id' => $request->equipo_local_id,
             'equipo_visitante_id' => $request->equipo_visitante_id,
-            'match_date' => $request->match_date,
-            'match_time' => $request->match_time,
-            'location' => $request->location,
+            'match_date' => $request->fecha,
+            'match_time' => $request->hora,
+            'location' => $request->ubicacion,
         ]);
 
-        return redirect()->route('tournaments.matches.index', ['tournament' => $torneo->id])
+        return redirect()->route('tournaments.matches.index', ['tournament' => $tournament->id])
             ->with('success', 'Partido creado con éxito.');
     }
 
-    public function edit(Torneo $torneo, Partido $partido)
-    {
-        return view('admin.matches.edit', compact('torneo', 'partido'));
+    public function edit(Torneo $tournament, $matchId)
+{
+    // Intenta cargar el partido por el ID
+    $partido = Partido::find($matchId);
+
+    if (!$partido) {
+        return redirect()->back()->withErrors('Partido no encontrado');
     }
 
-    public function update(Request $request, Torneo $torneo, Partido $partido)
+    $tournament->load('equipos');
+    return view('admin.matches.edit', compact('tournament', 'partido'));
+}
+
+
+    public function update(Request $request, Torneo $tournament, Partido $partido)
     {
         $request->validate([
             'equipo_local_id' => 'required|exists:equipos,id',
             'equipo_visitante_id' => 'required|exists:equipos,id|different:equipo_local_id',
-            'match_date' => 'required|date',
-            'match_time' => 'required',
-            'location' => 'nullable|string|max:255',
+            'fecha' => 'required|date',
+            'hora' => 'required',
+            'ubicacion' => 'nullable|string|max:255',
         ]);
 
-        // Actualizar el partido
         $partido->update([
             'equipo_local_id' => $request->equipo_local_id,
             'equipo_visitante_id' => $request->equipo_visitante_id,
-            'match_date' => $request->match_date,
-            'match_time' => $request->match_time,
-            'location' => $request->location,
+            'match_date' => $request->fecha,
+            'match_time' => $request->hora,
+            'location' => $request->ubicacion,
         ]);
 
-        return redirect()->route('tournaments.matches.index', ['tournament' => $torneo->id])
+        return redirect()->route('tournaments.matches.index', ['tournament' => $tournament->id])
             ->with('success', 'Partido actualizado con éxito.');
     }
 
-    public function destroy(Torneo $torneo, Partido $partido)
+    public function destroy(Torneo $tournament, Partido $partido)
     {
         $partido->delete();
 
-        return redirect()->route('tournaments.matches.index', ['tournament' => $torneo->id])
+        return redirect()->route('tournaments.matches.index', ['tournament' => $tournament->id])
             ->with('success', 'Partido eliminado con éxito.');
     }
 }

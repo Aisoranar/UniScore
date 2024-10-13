@@ -17,13 +17,19 @@ class Estadistica extends Model
         'red_cards',
     ];
 
-    // Relación con Jugador
+    /**
+     * Relación con el modelo Jugador
+     * Una estadística pertenece a un jugador.
+     */
     public function jugador()
     {
         return $this->belongsTo(Jugador::class);
     }
 
-    // Relación con Partido
+    /**
+     * Relación con el modelo Partido
+     * Una estadística pertenece a un partido.
+     */
     public function partido()
     {
         return $this->belongsTo(Partido::class);

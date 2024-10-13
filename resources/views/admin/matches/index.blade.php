@@ -4,6 +4,10 @@
 <h1>Partidos de {{ $torneo->name }}</h1>
 <a href="{{ route('tournaments.matches.create', ['tournament' => $torneo->id]) }}" class="btn btn-primary">Programar Partido</a>
 
+@if (session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+
 <table class="table">
     <thead>
         <tr>
