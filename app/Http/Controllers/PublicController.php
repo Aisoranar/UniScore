@@ -2,62 +2,75 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Equipo;
-use App\Models\Estadistica;
 use App\Models\Galeria;
-use App\Models\Jugador;
 use App\Models\Partido;
+use App\Models\Jugador;
+use App\Models\Estadistica;
+use App\Models\Equipo;
 use App\Models\Torneo;
-use Illuminate\Http\Request;
 
 class PublicController extends Controller
 {
-    // Mostrar todos los torneos
-    public function tournaments()
-    {
-        $tournaments = Torneo::all();
-        return view('public.tournaments', compact('tournaments'));
-    }
-
-    // Mostrar todos los equipos
-    public function teams()
-    {
-        $teams = Equipo::with('torneo')->get();
-        return view('public.teams', compact('teams'));
-    }
-
-    // Mostrar todos los jugadores
-    public function players()
-    {
-        $players = Jugador::with('equipo')->get();
-        return view('public.players', compact('players'));
-    }
-
-    // Mostrar todos los partidos
-    public function matches()
-    {
-        $matches = Partido::with(['equipoLocal', 'equipoVisitante', 'torneo'])->get();
-        return view('public.matches', compact('matches'));
-    }
-
-    // Mostrar todos los resultados (partidos jugados)
-    public function results()
-    {
-        $results = Partido::whereNotNull('local_score')->whereNotNull('visitor_score')->get();
-        return view('public.results', compact('results'));
-    }
-
-    // Mostrar todas las estadísticas
-    public function statistics()
-    {
-        $statistics = Estadistica::with(['jugador', 'partido'])->get();
-        return view('public.statistics', compact('statistics'));
-    }
-
-    // Mostrar galería de imágenes
+    /**
+     * Mostrar la vista de la galería.
+     */
     public function gallery()
     {
-        $gallery = Galeria::all();
-        return view('public.gallery', compact('gallery'));
+        $galerias = Galeria::all();
+        return view('public.gallery', compact('galerias'));
+    }
+
+    /**
+     * Mostrar la vista de los partidos.
+     */
+    public function matches()
+    {
+        $partidos = Partido::with(['equipoLocal', 'equipoVisitante'])->get();
+        return view('public.matches', compact('partidos'));
+    }
+
+    /**
+     * Mostrar la vista de los jugadores.
+     */
+    public function players()
+    {
+        $jugadores = Jugador::with('equipo')->get();
+        return view('public.players', compact('jugadores'));
+    }
+
+    /**
+     * Mostrar la vista de las estadísticas.
+     */
+    public function statistics()
+    {
+        $estadisticas = Estadistica::with(['jugador', 'jugador.equipo'])->get();
+        return view('public.statistics', compact('estadisticas'));
+    }
+
+    /**
+     * Mostrar la vista de los equipos.
+     */
+    public function teams()
+    {
+        $equipos = Equipo::with('torneo')->get();
+        return view('public.teams', compact('equipos'));
+    }
+
+    /**
+     * Mostrar la vista de los torneos.
+     */
+    public function tournaments()
+    {
+        $torneos = Torneo::all();
+        return view('public.tournaments', compact('torneos'));
+    }
+
+    /**
+     * Mostrar la vista de los resultados.
+     */
+    public function results()
+    {
+        $estadisticas = Estadistica::with(['jugador', 'jugador.equipo'])->get();
+        return view('public.statistics', compact('estadisticas'));
     }
 }
