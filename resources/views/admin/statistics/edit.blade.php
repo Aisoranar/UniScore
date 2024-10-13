@@ -3,7 +3,7 @@
 @section('content')
 <h1>Editar Estadística del Jugador: {{ $estadistica->jugador->name }}</h1>
 
-<form action="{{ route('statistics.update', $estadistica) }}" method="POST">
+<form action="{{ route('matches.statistics.update', ['match' => $match->id, 'estadistica' => $estadistica->id]) }}" method="POST">
     @csrf
     @method('PUT')
     <div class="form-group">

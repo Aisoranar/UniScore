@@ -11,25 +11,28 @@ class StatisticController extends Controller
 {
     public function index(Partido $partido)
 {
-    // Verifica que el partido existe
-    if (!$partido) {
-        abort(404);
+    // Obtener estadísticas del partido con la información del jugador y su equipo
+    $estadisticas = Estadistica::with('jugador.equipo')
+                    ->where('partido_id', $partido->id)
+                    ->get();
+
+    // Obtener los jugadores de ambos equipos para poder agregar estadísticas
+    $jugadores = Jugador::whereIn('equipo_id', [$partido->equipo_local_id, $partido->equipo_visitante_id])
+                    ->with('equipo')
+                    ->get();
+
+   
+
+    return view('admin.statistics.index', compact('estadisticas', 'partido', 'jugadores'));
+}
+
+
+
+    public function create(Partido $partido)
+    {
+        $jugadores = Jugador::all();
+        return view('admin.statistics.create', compact('partido', 'jugadores'));
     }
-
-    $estadisticas = $partido->estadisticas;
-    return view('admin.statistics.index', compact('partido', 'estadisticas'));
-}
-
-
-
-
-
-public function create(Partido $partido)
-{
-    $jugadores = Jugador::all();
-    return view('admin.statistics.create', compact('partido', 'jugadores'));
-}
-
 
     public function store(Request $request, Partido $partido)
     {
@@ -41,7 +44,7 @@ public function create(Partido $partido)
         ]);
 
         $partido->estadisticas()->create($request->all());
-        return redirect()->route('statistics.index', $partido)->with('success', 'Estadística creada con éxito.');
+        return redirect()->route('matches.statistics.index', ['match' => $partido->id])->with('success', 'Estadística creada con éxito.');
     }
 
     public function edit(Partido $partido, Estadistica $estadistica)
@@ -60,12 +63,12 @@ public function create(Partido $partido)
         ]);
 
         $estadistica->update($request->all());
-        return redirect()->route('statistics.index', $partido)->with('success', 'Estadística actualizada con éxito.');
+        return redirect()->route('matches.statistics.index', ['match' => $partido->id])->with('success', 'Estadística actualizada con éxito.');
     }
 
     public function destroy(Partido $partido, Estadistica $estadistica)
     {
         $estadistica->delete();
-        return redirect()->route('statistics.index', $partido)->with('success', 'Estadística eliminada con éxito.');
+        return redirect()->route('matches.statistics.index', ['match' => $partido->id])->with('success', 'Estadística eliminada con éxito.');
     }
 }
