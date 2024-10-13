@@ -10,27 +10,25 @@ use Illuminate\Http\Request;
 class StatisticController extends Controller
 {
     public function index(Partido $partido)
-{
-    // Obtener estadísticas del partido con la información del jugador y su equipo
-    $estadisticas = Estadistica::with('jugador.equipo')
-                    ->where('partido_id', $partido->id)
-                    ->get();
+    {
+        // Obtener estadísticas del partido con la información del jugador y su equipo
+        $estadisticas = Estadistica::with('jugador.equipo')
+                        ->where('partido_id', $partido->id)
+                        ->get();
 
-    // Obtener los jugadores de ambos equipos para poder agregar estadísticas
-    $jugadores = Jugador::whereIn('equipo_id', [$partido->equipo_local_id, $partido->equipo_visitante_id])
-                    ->with('equipo')
-                    ->get();
+        // Obtener los jugadores de ambos equipos para poder agregar estadísticas
+        $jugadores = Jugador::whereIn('equipo_id', [$partido->equipo_local_id, $partido->equipo_visitante_id])
+                        ->with('equipo')
+                        ->get();
 
-   
-
-    return view('admin.statistics.index', compact('estadisticas', 'partido', 'jugadores'));
-}
-
-
+        return view('admin.statistics.index', compact('estadisticas', 'partido', 'jugadores'));
+    }
 
     public function create(Partido $partido)
     {
-        $jugadores = Jugador::all();
+        $jugadores = Jugador::whereIn('equipo_id', [$partido->equipo_local_id, $partido->equipo_visitante_id])
+                        ->with('equipo')
+                        ->get();
         return view('admin.statistics.create', compact('partido', 'jugadores'));
     }
 
@@ -49,7 +47,9 @@ class StatisticController extends Controller
 
     public function edit(Partido $partido, Estadistica $estadistica)
     {
-        $jugadores = Jugador::all();
+        $jugadores = Jugador::whereIn('equipo_id', [$partido->equipo_local_id, $partido->equipo_visitante_id])
+                        ->with('equipo')
+                        ->get();
         return view('admin.statistics.edit', compact('partido', 'estadistica', 'jugadores'));
     }
 
