@@ -19,17 +19,18 @@ class TeamController extends Controller
 
     // Formulario para registrar un nuevo equipo
     public function create($torneoId)
-    {
-        $torneo = Torneo::findOrFail($torneoId);
+{
+    $torneo = Torneo::findOrFail($torneoId);
+    $torneos = Torneo::all(); // Obtener todos los torneos
 
-        // Verificar si se alcanzó el número máximo de equipos
-        if ($torneo->equipos->count() >= $torneo->number_of_teams) {
-            return redirect()->route('teams.index', $torneoId)
-                             ->with('error', 'No se pueden registrar más equipos en este torneo.');
-        }
-
-        return view('admin.teams.create', compact('torneo'));
+    // Verificar si se alcanzó el número máximo de equipos
+    if ($torneo->equipos->count() >= $torneo->number_of_teams) {
+        return redirect()->route('teams.index', $torneoId)
+                         ->with('error', 'No se pueden registrar más equipos en este torneo.');
     }
+
+    return view('admin.teams.create', compact('torneo', 'torneos'));
+}
 
     // Guardar el nuevo equipo y asociarlo al torneo
     public function store(Request $request, $torneoId)
@@ -80,7 +81,19 @@ class TeamController extends Controller
     // Eliminar un equipo del torneo
     public function destroy($torneoId, $equipoId)
     {
+        $torneo = Torneo::findOrFail($torneoId);
         $equipo = Equipo::where('torneo_id', $torneoId)->findOrFail($equipoId);
+
+        // Verificar si el equipo pertenece al torneo
+        if ($equipo->torneo_id != $torneoId) {
+            return redirect()->route('teams.index', $torneoId)
+                             ->with('error', 'El equipo no pertenece a este torneo.');
+        }
+
+        // Eliminar jugadores asociados al equipo
+        $equipo->jugadores()->delete();
+
+        // Eliminar el equipo
         $equipo->delete();
 
         return redirect()->route('teams.index', $torneoId)
