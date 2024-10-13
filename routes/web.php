@@ -35,7 +35,7 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
     // CRUD de usuarios, accesible solo para el SuperAdmin
     Route::resource('users', UserController::class);
 
-    // Ruta para la creación de roles (incluye los roles 'coach' y 'student')
+    // Ruta para la creación de roles (incluye los roles 'coach' y 'trainee')
     Route::post('/superadmin/create-role', [SuperAdminController::class, 'createRole'])
         ->name('superadmin.createRole');
 
@@ -65,16 +65,30 @@ Route::post('/login', [LoginController::class, 'login'])
     ->middleware('guest');
 
 Route::middleware('auth')->group(function () {
-    // Ruta accesible para superadmin y estudiante
-    Route::get('/estudiante', function () {
-        return view('view.estudiante.index');
-    })->name('estudiante.dashboard')->middleware('role:student|superadmin');
+    // Ruta accesible para superadmin y aprendiz
+    Route::get('/trainee', function () {
+        return view('view.trainee.index');
+    })->name('trainee.dashboard')->middleware('role:trainee|superadmin');
 
     // Ruta accesible solo para superadmin y coach
     Route::get('/coach', function () {
         return view('view.coach.index');
     })->name('coach.dashboard')->middleware('role:coach|superadmin');
+
+    Route::middleware(['auth'])->prefix('profile')->group(function () {
+        Route::get('/{id}', [TraineeController::class, 'show'])
+            ->name('profile.show');
+    });
+    
 });
+
+Route::middleware(['auth'])->prefix('profile')->group(function () {
+    Route::get('/{id}', [TraineeController::class, 'show'])
+        ->name('profile.show');
+    Route::put('/{user_id}', [TraineeController::class, 'update'])
+        ->name('profile.update');
+});
+
 
 // Ruta para mostrar el home de usuarios autenticados
 Route::get('/home', [HomeController::class, 'index'])
@@ -86,23 +100,17 @@ Route::post('/logout', [LogoutController::class, 'logout'])
     ->name('logout.perform')
     ->middleware('auth');
 
-// Rutas para gestionar el perfil del estudiante
+// Rutas para gestionar el perfil del aprendiz
 Route::get('/perfil/{id}/editar', [TraineeController::class, 'edit'])
     ->name('perfil.editar')
     ->middleware('auth');
+
+
 Route::put('/perfil/{id}', [TraineeController::class, 'update'])
-    ->name('student.update')
+    ->name('trainee.update')
     ->middleware('auth');
 
-// Rutas para la lista de coach y estudiantes
-Route::middleware(['auth'])->group(function () {
-    Route::get('/list/coach', [CoachController::class, 'index'])
-        ->name('list.coach')
-        ->middleware('role:superadmin');
-    Route::get('/list/students', [TraineeController::class, 'index'])
-        ->name('list.students')
-        ->middleware('role:coach|superadmin');
-});
+
 
 // Rutas para el perfil del coach
 Route::middleware('auth')->group(function () {
@@ -122,8 +130,6 @@ Route::middleware(['auth'])->prefix('profile')->group(function () {
         ->name('profile.updateCoach');
     Route::put('/{user_id}', [TraineeController::class, 'update'])
         ->name('profile.update');
-    Route::put('/update-student/observation', [TraineeController::class, 'updateStudentObservation'])
-        ->name('profile.updateStudentObservation');
 });
 
 // Rutas para la gestión de torneos y recursos relacionados
@@ -142,37 +148,30 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
     // CRUD de Partidos por Torneo
     Route::resource('tournaments.matches', MatchController::class)->shallow();
 
-// CRUD de Estadísticas por Partido
-Route::resource('matches.statistics', StatisticController::class)->shallow();
-Route::prefix('tournaments')->group(function () {
-    Route::resource('matches', MatchController::class)->except(['index', 'show']);
-});
+    // CRUD de Estadísticas por Partido
+    Route::resource('matches.statistics', StatisticController::class)->shallow();
+    Route::prefix('tournaments')->group(function () {
+        Route::resource('matches', MatchController::class)->except(['index', 'show']);
+    });
+    Route::get('/admin/partidos/{match}/estadisticas', [StatisticController::class, 'index'])->name('admin.matches.statistics.index');
 
-
-
-// Rutas para gestionar estadísticas de los partidos
-Route::prefix('admin')->name('admin.matches.statistics.')->group(function () {
-    Route::get('matches/{match}/statistics', [StatisticController::class, 'index'])->name('index');
-    Route::get('matches/{match}/statistics/create', [StatisticController::class, 'create'])->name('create');
-    Route::post('matches/{match}/statistics', [StatisticController::class, 'store'])->name('store');
-    Route::get('matches/{match}/statistics/{estadistica}/edit', [StatisticController::class, 'edit'])->name('edit');
-    Route::put('matches/{match}/statistics/{estadistica}', [StatisticController::class, 'update'])->name('update');
-    Route::delete('matches/{match}/statistics/{estadistica}', [StatisticController::class, 'destroy'])->name('destroy');
-});
-
-
-
-
-
+    // Rutas para gestionar estadísticas de los partidos
+    Route::prefix('admin')->name('admin.matches.statistics.')->group(function () {
+        Route::get('matches/{match}/statistics', [StatisticController::class, 'index'])->name('index');
+        Route::get('matches/{match}/statistics/create', [StatisticController::class, 'create'])->name('create');
+        Route::post('matches/{match}/statistics', [StatisticController::class, 'store'])->name('store');
+        Route::get('matches/{match}/statistics/{estadistica}/edit', [StatisticController::class, 'edit'])->name('edit');
+        Route::put('matches/{match}/statistics/{estadistica}', [StatisticController::class, 'update'])->name('update');
+        Route::delete('matches/{match}/statistics/{estadistica}', [StatisticController::class, 'destroy'])->name('destroy');
+    });
 
     // Ruta para crear un partido
     Route::get('tournaments/{torneo}/teams/{equipo}/players', [PlayerController::class, 'index'])
-    ->name('players.index');
+        ->name('players.index');
     Route::get('tournaments/{torneo}', [TournamentController::class, 'show'])->name('tournaments.show');
     // Rutas para la gestión de partidos
     Route::resource('tournaments.matches', MatchController::class)
-    ->except(['show']);
-
+        ->except(['show']);
 
     // Rutas personalizadas para equipos dentro de torneos
     Route::prefix('torneos/{torneo}/equipos')->group(function () {
@@ -224,4 +223,3 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
     Route::delete('tournaments/{torneoId}/teams/{equipoId}/players/{jugadorId}', [PlayerController::class, 'destroy'])
         ->name('players.destroy');
 });
-

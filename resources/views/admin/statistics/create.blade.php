@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>Agregar Estadística para el Partido: {{ $match->equipoLocal->name }} vs {{ $match->equipoVisitante->name }}</h1>
+<h1>Agregar Estadística para el Partido: {{ $partido->equipoLocal->name }} vs {{ $partido->equipoVisitante->name }}</h1>
 
-<form action="{{ route('matches.statistics.store', $match) }}" method="POST">
+<form action="{{ route('matches.statistics.store', $partido->id) }}" method="POST">
     @csrf
     <div class="form-group">
         <label for="jugador_id">Jugador</label>
