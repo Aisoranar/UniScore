@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
     <style>
+        /* Estilo general del navbar */
         .navbar-custom {
             position: relative;
             display: flex;
@@ -21,15 +22,68 @@
             padding: 1rem 16px;
             background-color: #fff;
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease;
+            transition: background-color 0.6s ease, box-shadow 0.6s ease, transform 0.3s ease;
         }
 
+        /* Efecto sticky */
         .navbar-sticky {
             background-color: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(5px);
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
+        /* Animación en el menú al hacer hover */
+        nav ul li a {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: color 0.4s, box-shadow 0.4s, transform 0.4s;
+        }
+
+        /* Fondo animado en el hover */
+        nav ul li a::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background-color: rgba(0, 123, 255, 0.2);
+            transition: width 0.5s ease, height 0.5s ease, top 0.5s ease, left 0.5s ease;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        /* Efecto de expansión del fondo */
+        nav ul li a:hover::before {
+            width: 200%;
+            height: 200%;
+        }
+
+        /* Cambio de color y animaciones en hover */
+        nav ul li a:hover {
+            color: #fff;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+        }
+
+        /* Rotación de iconos en hover */
+        nav ul li a i {
+            transition: transform 0.4s ease-in-out;
+        }
+
+        nav ul li a:hover i {
+            transform: rotate(360deg);
+        }
+
+        /* Botón del menú (hamburguesa) animado */
         .menu-toggle {
             display: none;
             flex-direction: column;
@@ -47,6 +101,7 @@
             transition: all 0.4s ease;
         }
 
+        /* Animación de la hamburguesa */
         .menu-toggle.active div:nth-child(1) {
             transform: translateY(9px) rotate(45deg);
         }
@@ -59,6 +114,7 @@
             transform: translateY(-9px) rotate(-45deg);
         }
 
+        /* Mostrar menú móvil */
         nav ul {
             display: flex;
             gap: 20px;
@@ -67,28 +123,7 @@
             list-style: none;
         }
 
-        nav ul li a {
-            display: flex;
-            align-items: center;
-            padding: 10px 20px;
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            border-radius: 8px;
-            transition: background-color 0.4s, color 0.4s, box-shadow 0.4s;
-        }
-
-        nav ul li a:hover {
-            background-color: #007bff;
-            color: #fff;
-            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
-        }
-
-        .menu {
-            display: flex;
-            align-items: center;
-        }
-
+        /* Efecto menú responsive */
         @media (max-width: 1024px) {
             .menu-toggle {
                 display: flex;
@@ -134,6 +169,16 @@
                 flex-direction: row;
             }
         }
+
+        /* Evitar desbordamientos */
+        body {
+            overflow-x: hidden;
+        }
+
+        /* Transición para el cuerpo del documento */
+        body, html {
+            transition: background-color 0.5s ease;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -144,7 +189,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
                     <a href="{{ route('home.index') }}">
-                        <img src="{{ asset('assets/img/uniscoreicon.svg') }}" alt="Icono de Uniscore" class="h-16 w-16 mr-2 @auth h-20 w-20 @endauth">
+                        <img src="{{ asset('assets/img/uniscoreicon.svg') }}" alt="Icono de Uniscore" class="h-24 w-24 mr-4">
                     </a>
                     <a href="{{ route('home.index') }}" class="text-3xl font-bold text-gradient">UNISCORE</a>
                 </div>
@@ -155,27 +200,27 @@
                 </div>
             </div>
             <nav class="menu mt-4 lg:mt-0">
-                <ul class="flex flex-col lg:flex-row items-center lg:items-center gap-4 lg:gap-8 overflow-x-auto lg:overflow-visible">
-                    <li><a href="{{ route('home.index') }}" class="nav-link"><i class="bi bi-house-door-fill"></i> Inicio</a></li>
-                    <li><a href="#" class="nav-link"><i class="bi bi-calendar"></i> Torneos</a></li>
-                 
-                    <li><a href="#" class="nav-link"><i class="bi bi-people-fill"></i> Equipos</a></li>
-                    <li><a href="#" class="nav-link"><i class="bi bi-list"></i> Clasificación</a></li>
-                    <li><a href="#" class="nav-link"><i class="bi bi-star-fill"></i> Goleadores</a></li>
-                    <li><a href="#" class="nav-link"><i class="bi bi-image"></i> Fotos y Videos</a></li>
+                <ul class="flex flex-col lg:flex-row items-center lg:items-center gap-4 lg:gap-8 lg:overflow-visible">
+                    <li><a href="{{ route('home.index') }}" class="nav-link"><i class="bi bi-house-door-fill mr-2"></i> Inicio</a></li>
+                    <li><a href="{{ route('tournaments.index') }}" class="nav-link"><i class="bi bi-calendar mr-2"></i> Torneos</a></li>
+                    <li><a href="{{ route('teams.index', ['torneo' => 1]) }}" class="nav-link"><i class="bi bi-people-fill mr-2"></i> Equipos</a></li>
+                    <li><a href="{{ route('teams.players.index', ['team' => 1]) }}" class="nav-link"><i class="bi bi-list mr-2"></i> Jugadores</a></li>
+                    <li><a href="{{ route('tournaments.matches.index', ['tournament' => 1]) }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Partidos</a></li>
+                    <li><a href="{{ route('matches.statistics.index', ['match' => 1]) }}" class="nav-link"><i class="bi bi-bar-chart-fill mr-2"></i> Estadísticas</a></li>
+                    <li><a href="#" class="nav-link"><i class="bi bi-image mr-2"></i> Galería</a></li>
                     @if(Auth::check())
                         @if(Auth::user()->role === 'trainee')
                             <li><a href="{{ route('perfil.editar', ['id' => Auth::id()]) }}" class="nav-link"><i class="fas fa-user-graduate mr-2"></i> Perfil</a></li>
                         @endif
-
+            
                         @if(Auth::user()->role === 'coach')
-                            <li><a href="{{ route('coach.perfil.show', ['id' => Auth::user()->id]) }}" class="nav-link"><i class="fas fa-chalkboard-teacher mobile-nav-icon"></i> Perfil Coach</a></li>
+                            <li><a href="{{ route('coach.perfil.show', ['id' => Auth::user()->id]) }}" class="nav-link"><i class="fas fa-chalkboard-teacher mr-2"></i> Perfil Coach</a></li>
                         @endif
-
+            
                         @if(Auth::user()->role === 'superadmin')
                             <li><a href="{{ route('users.index') }}" class="nav-link"><i class="fas fa-cogs mr-2"></i> Configuración</a></li>
                         @endif
-
+            
                         <li>
                             <form id="logout-form" action="{{ route('logout.perform') }}" method="POST" class="flex items-center">
                                 @csrf
@@ -184,83 +229,13 @@
                         </li>
                     @endif
                     @guest
-                        <li><a href="{{ route('login') }}" class="btn btn-primary"><i class="bi bi-person-fill"></i> Iniciar Sesión</a></li>
+                        <li><a href="{{ route('login') }}" class="btn btn-primary"><i class="bi bi-person-fill mr-2"></i> Iniciar Sesión</a></li>
                     @endguest
                 </ul>
             </nav>
+            
         </div>
     </header>
-
-    <style>
-        .text-gradient {
-            background: linear-gradient(45deg, #007bff, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradient-animation 3s ease infinite;
-        }
-
-        @keyframes gradient-animation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 10px 20px;
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            border-radius: 8px;
-            transition: background-color 0.4s, color 0.4s, box-shadow 0.4s, transform 0.4s;
-        }
-
-        .nav-link:hover {
-            background-color: #007bff;
-            color: #fff;
-            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
-            transform: scale(1.05);
-        }
-
-        .nav-link i {
-            margin-right: 8px;
-            transition: transform 0.4s;
-        }
-
-        .nav-link:hover i {
-            transform: rotate(360deg);
-        }
-    </style>
-
-    <style>
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 10px 20px;
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            border-radius: 8px;
-            transition: background-color 0.4s, color 0.4s, box-shadow 0.4s, transform 0.4s;
-        }
-
-        .nav-link:hover {
-            background-color: #007bff;
-            color: #fff;
-            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
-            transform: scale(1.05);
-        }
-
-        .nav-link i {
-            margin-right: 8px;
-            transition: transform 0.4s;
-        }
-
-        .nav-link:hover i {
-            transform: rotate(360deg);
-        }
-    </style>
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -274,9 +249,7 @@
             <p style="margin-bottom: 0;">
                 Diseñado por: 
                 <a href="https://www.linkedin.com/in/aisoranar/" target="_blank" 
-                   style="color: #f8f9fa; text-decoration: none; font-weight: bold; 
-                          transition: color 0.3s ease, text-shadow 0.3s ease; 
-                          text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);">
+                   style="color: #f8f9fa; text-decoration: none; font-weight: bold;">
                     Aisor Anaya
                 </a>
             </p>

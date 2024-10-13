@@ -18,12 +18,13 @@
                 <td>{{ $equipo->name }}</td>
                 <td>{{ $equipo->coach }}</td>
                 <td>
-                    <a href="{{ route('teams.edit', $equipo) }}" class="btn btn-warning">Editar</a>
-                    <form action="{{ route('teams.destroy', $equipo) }}" method="POST" style="display: inline-block;">
+                    <a href="{{ route('teams.edit', ['torneo' => $torneo->id, 'equipo' => $equipo->id]) }}" class="btn btn-warning">Editar</a>
+                    <form action="{{ route('teams.destroy', ['torneo' => $torneo->id, 'equipo' => $equipo->id]) }}" method="POST" style="display: inline-block;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Eliminar</button>
                     </form>
+                    
                 </td>
             </tr>
         @endforeach

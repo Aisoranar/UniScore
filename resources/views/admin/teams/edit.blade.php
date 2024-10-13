@@ -3,7 +3,7 @@
 @section('content')
 <h1>Editar Equipo: {{ $equipo->name }}</h1>
 
-<form action="{{ route('teams.update', $equipo) }}" method="POST">
+<form action="{{ route('teams.update', ['torneo' => $torneo->id, 'equipo' => $equipo->id]) }}" method="POST">
     @csrf
     @method('PUT')
     <div class="form-group">
@@ -16,4 +16,5 @@
     </div>
     <button type="submit" class="btn btn-success">Actualizar</button>
 </form>
+
 @endsection
