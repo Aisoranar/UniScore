@@ -2,7 +2,7 @@
 
 @section('content')
 <h1>Partidos de {{ $torneo->name }}</h1>
-<a href="{{ route('tournaments.matches.create', ['torneo' => $torneo->id]) }}" class="btn btn-primary">Programar Partido</a>
+<a href="{{ route('tournaments.matches.create', ['tournament' => $torneo->id]) }}" class="btn btn-primary">Programar Partido</a>
 
 <table class="table">
     <thead>
@@ -24,8 +24,8 @@
                 <td>{{ $partido->match_time }}</td>
                 <td>{{ $partido->location }}</td>
                 <td>
-                    <a href="{{ route('matches.edit', $partido) }}" class="btn btn-warning">Editar</a>
-                    <form action="{{ route('matches.destroy', $partido) }}" method="POST" style="display: inline-block;">
+                    <a href="{{ route('tournaments.matches.edit', ['tournament' => $torneo->id, 'match' => $partido->id]) }}" class="btn btn-warning">Editar</a>
+                    <form action="{{ route('tournaments.matches.destroy', ['tournament' => $torneo->id, 'match' => $partido->id]) }}" method="POST" style="display: inline-block;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Eliminar</button>
