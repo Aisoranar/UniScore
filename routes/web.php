@@ -133,6 +133,8 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
     
     // CRUD de Equipos por Torneo
     Route::resource('tournaments.teams', TeamController::class)->shallow();
+    Route::get('admin/torneos/{torneo}/equipos/crear', [TeamController::class, 'create'])->name('teams.create');
+
     
     // CRUD de Jugadores por Equipo
     Route::resource('teams.players', PlayerController::class)->shallow();
