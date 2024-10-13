@@ -43,4 +43,6 @@ class Partido extends Model
     {
         return $this->hasMany(Estadistica::class);
     }
+
+    
 }

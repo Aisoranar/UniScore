@@ -10,16 +10,26 @@ use Illuminate\Http\Request;
 class StatisticController extends Controller
 {
     public function index(Partido $partido)
-    {
-        $estadisticas = $partido->estadisticas;
-        return view('admin.statistics.index', compact('partido', 'estadisticas'));
+{
+    // Verifica que el partido existe
+    if (!$partido) {
+        abort(404);
     }
 
-    public function create(Partido $partido)
-    {
-        $jugadores = Jugador::all();
-        return view('admin.statistics.create', compact('partido', 'jugadores'));
-    }
+    $estadisticas = $partido->estadisticas;
+    return view('admin.statistics.index', compact('partido', 'estadisticas'));
+}
+
+
+
+
+
+public function create(Partido $partido)
+{
+    $jugadores = Jugador::all();
+    return view('admin.statistics.create', compact('partido', 'jugadores'));
+}
+
 
     public function store(Request $request, Partido $partido)
     {

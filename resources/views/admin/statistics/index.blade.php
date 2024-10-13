@@ -1,8 +1,9 @@
 @extends('layouts.app')
 
-@section('content')
-<h1>Estadísticas del Partido: {{ $partido->equipoLocal->name }} vs {{ $partido->equipoVisitante->name }}</h1>
-<a href="{{ route('statistics.create', $partido) }}" class="btn btn-primary">Agregar Estadística</a>
+@section('content'){{ dd($partido) }}
+
+<h1>Estadísticas del Partido: {{ $partido->equipoLocal->name ?? 'Equipo Local no disponible' }} vs {{ $partido->equipoVisitante->name ?? 'Equipo Visitante no disponible' }}</h1>
+<a href="{{ route('matches.statistics.create', ['match' => $partido->id]) }}" class="btn btn-primary">Agregar Estadística</a>
 
 <table class="table">
     <thead>
@@ -17,7 +18,7 @@
     <tbody>
         @foreach($estadisticas as $estadistica)
             <tr>
-                <td>{{ $estadistica->jugador->name }}</td>
+                <td>{{ $estadistica->jugador ? $estadistica->jugador->name : 'Jugador no disponible' }}</td>
                 <td>{{ $estadistica->goals }}</td>
                 <td>{{ $estadistica->yellow_cards }}</td>
                 <td>{{ $estadistica->red_cards }}</td>

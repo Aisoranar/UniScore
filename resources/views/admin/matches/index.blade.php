@@ -2,7 +2,7 @@
 
 @section('content')
 <h1>Partidos de {{ $torneo->name }}</h1>
-<a href="{{ route('matches.create', $torneo) }}" class="btn btn-primary">Programar Partido</a>
+<a href="{{ route('tournaments.matches.create', $torneo) }}" class="btn btn-primary">Programar Partido</a>
 
 <table class="table">
     <thead>

@@ -143,6 +143,10 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
     // CRUD de Estadísticas por Partido
     Route::resource('matches.statistics', StatisticController::class)->shallow();
 
+    // Ruta para crear un partido
+    Route::get('tournaments/{torneo}/matches/create', [MatchController::class, 'create'])
+        ->name('tournaments.matches.create');
+
     // Rutas personalizadas para equipos dentro de torneos
     Route::prefix('torneos/{torneo}/equipos')->group(function () {
         Route::get('/', [TeamController::class, 'index'])->name('teams.index');
@@ -156,7 +160,6 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
             'equipos' => 'equipo',
             'jugadores' => 'jugador',
         ]);
-        
     });
 
     // Rutas para gestionar los jugadores
