@@ -9,7 +9,7 @@
     </div>
 @endif
 
-<a href="{{ route('players.create', ['torneo' => $torneo->id, 'equipo' => $equipo->id]) }}" class="btn btn-primary">Agregar Jugador</a>
+<a href="{{ route('players.create', ['torneoId' => $torneo->id, 'equipoId' => $equipo->id]) }}" class="btn btn-primary">Agregar Jugador</a>
 
 <table class="table">
     <thead>
@@ -27,8 +27,8 @@
                 <td>{{ $jugador->number }}</td>
                 <td>{{ $jugador->position }}</td>
                 <td>
-                    <a href="{{ route('players.edit', ['torneo' => $torneo->id, 'equipo' => $equipo->id, 'jugador' => $jugador->id]) }}" class="btn btn-warning">Editar</a>
-                    <form action="{{ route('players.destroy', ['torneo' => $torneo->id, 'equipo' => $equipo->id, 'jugador' => $jugador->id]) }}" method="POST" style="display: inline-block;">
+                    <a href="{{ route('players.edit', ['torneoId' => $torneo->id, 'equipoId' => $equipo->id, 'jugadorId' => $jugador->id]) }}" class="btn btn-warning">Editar</a>
+                    <form action="{{ route('players.destroy', ['torneoId' => $torneo->id, 'equipoId' => $equipo->id, 'jugadorId' => $jugador->id]) }}" method="POST" style="display: inline-block;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Eliminar</button>

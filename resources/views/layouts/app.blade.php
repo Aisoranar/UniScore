@@ -204,7 +204,7 @@
                     <li><a href="{{ route('home.index') }}" class="nav-link"><i class="bi bi-house-door-fill mr-2"></i> Inicio</a></li>
                     <li><a href="{{ route('tournaments.index') }}" class="nav-link"><i class="bi bi-calendar mr-2"></i> Torneos</a></li>
                     <li><a href="{{ route('teams.index', ['torneo' => 1]) }}" class="nav-link"><i class="bi bi-people-fill mr-2"></i> Equipos</a></li>
-                    <li><a href="{{ route('teams.players.index', ['team' => 1]) }}" class="nav-link"><i class="bi bi-list mr-2"></i> Jugadores</a></li>
+                    <li><a href="{{ route('players.index', ['torneoId' => 1, 'equipoId' => 1]) }}" class="nav-link"><i class="bi bi-list mr-2"></i> Jugadores</a></li>
                     <li><a href="{{ route('tournaments.matches.index', ['tournament' => 1]) }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Partidos</a></li>
                     <li><a href="{{ route('matches.statistics.index', ['match' => 1]) }}" class="nav-link"><i class="bi bi-bar-chart-fill mr-2"></i> Estadísticas</a></li>
                     <li><a href="#" class="nav-link"><i class="bi bi-image mr-2"></i> Galería</a></li>

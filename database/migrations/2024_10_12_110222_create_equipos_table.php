@@ -9,8 +9,8 @@ return new class extends Migration {
         Schema::create('equipos', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('torneo_id')->constrained()->cascadeOnDelete();
-            $table->string('coach')->nullable();
+            $table->foreignId('torneo_id')->constrained()->cascadeOnDelete(); 
+            $table->string('coach')->nullable(); 
             $table->timestamps();
         });
     }

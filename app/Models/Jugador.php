@@ -9,6 +9,10 @@ class Jugador extends Model
 {
     use HasFactory;
 
+    // Especificar el nombre correcto de la tabla
+    protected $table = 'jugadores';
+
+    // Definir los campos que se pueden asignar masivamente
     protected $fillable = [
         'name',
         'equipo_id',

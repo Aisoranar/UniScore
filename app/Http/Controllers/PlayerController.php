@@ -18,12 +18,15 @@ class PlayerController extends Controller
         return view('admin.players.index', compact('torneo', 'equipo', 'jugadores'));
     }
 
-    public function create(Torneo $torneo, Equipo $equipo)
+    public function create($torneoId, $equipoId)
     {
+        $torneo = Torneo::findOrFail($torneoId);
+        $equipo = Equipo::findOrFail($equipoId);
+
         return view('admin.players.create', compact('torneo', 'equipo'));
     }
 
-    public function store(Request $request, Torneo $torneo, Equipo $equipo)
+    public function store(Request $request, $torneoId, $equipoId)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -31,18 +34,23 @@ class PlayerController extends Controller
             'position' => 'required|string',
         ]);
 
+        $equipo = Equipo::findOrFail($equipoId);
         $equipo->jugadores()->create($request->all());
 
-        return redirect()->route('players.index', ['torneo' => $torneo->id, 'equipo' => $equipo->id])
+        return redirect()->route('players.index', ['torneoId' => $torneoId, 'equipoId' => $equipoId])
                          ->with('success', 'Jugador creado con éxito.');
     }
 
-    public function edit(Torneo $torneo, Equipo $equipo, Jugador $jugador)
+    public function edit($torneoId, $equipoId, $jugadorId)
     {
+        $torneo = Torneo::findOrFail($torneoId);
+        $equipo = Equipo::findOrFail($equipoId);
+        $jugador = Jugador::findOrFail($jugadorId);
+
         return view('admin.players.edit', compact('torneo', 'equipo', 'jugador'));
     }
 
-    public function update(Request $request, Torneo $torneo, Equipo $equipo, Jugador $jugador)
+    public function update(Request $request, $torneoId, $equipoId, $jugadorId)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -50,17 +58,19 @@ class PlayerController extends Controller
             'position' => 'required|string',
         ]);
 
+        $jugador = Jugador::findOrFail($jugadorId);
         $jugador->update($request->all());
 
-        return redirect()->route('players.index', ['torneo' => $torneo->id, 'equipo' => $equipo->id])
+        return redirect()->route('players.index', ['torneoId' => $torneoId, 'equipoId' => $equipoId])
                          ->with('success', 'Jugador actualizado con éxito.');
     }
 
-    public function destroy(Torneo $torneo, Equipo $equipo, Jugador $jugador)
+    public function destroy($torneoId, $equipoId, $jugadorId)
     {
+        $jugador = Jugador::findOrFail($jugadorId);
         $jugador->delete();
 
-        return redirect()->route('players.index', ['torneo' => $torneo->id, 'equipo' => $equipo->id])
+        return redirect()->route('players.index', ['torneoId' => $torneoId, 'equipoId' => $equipoId])
                          ->with('success', 'Jugador eliminado con éxito.');
     }
 }

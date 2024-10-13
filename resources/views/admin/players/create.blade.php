@@ -3,7 +3,7 @@
 @section('content')
 <h1>Agregar Jugador al Equipo: {{ $equipo->name }}</h1>
 
-<form action="{{ route('players.store', ['torneo' => $torneo->id, 'equipo' => $equipo->id]) }}" method="POST">
+<form action="{{ route('players.store', ['torneoId' => $torneo->id, 'equipoId' => $equipo->id]) }}" method="POST">
     @csrf
     <div class="form-group">
         <label for="name">Nombre del Jugador</label>

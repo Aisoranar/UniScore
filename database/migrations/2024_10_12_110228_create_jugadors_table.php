@@ -10,11 +10,10 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->foreignId('equipo_id')->constrained('equipos');
-            $table->integer('number')->nullable();
+            $table->integer('number')->nullable(); 
             $table->enum('position', ['Portero', 'Defensa', 'Centrocampista', 'Delantero'])->nullable();
             $table->timestamps();
         });
-        
     }
 
     public function down(): void {

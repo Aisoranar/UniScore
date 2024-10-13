@@ -144,8 +144,8 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
     Route::resource('matches.statistics', StatisticController::class)->shallow();
 
     // Ruta para crear un partido
-    Route::get('tournaments/{torneo}/matches/create', [MatchController::class, 'create'])
-        ->name('tournaments.matches.create');
+    Route::get('tournaments/{torneo}/teams/{equipo}/players', [PlayerController::class, 'index'])
+    ->name('players.index');
 
     // Rutas personalizadas para equipos dentro de torneos
     Route::prefix('torneos/{torneo}/equipos')->group(function () {
@@ -155,11 +155,6 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
         Route::get('/{equipo}/editar', [TeamController::class, 'edit'])->name('teams.edit');
         Route::put('/{equipo}', [TeamController::class, 'update'])->name('teams.update');
         Route::delete('/{equipo}', [TeamController::class, 'destroy'])->name('teams.destroy');
-        Route::resource('torneos.equipos.jugadores', PlayerController::class)->parameters([
-            'torneos' => 'torneo',
-            'equipos' => 'equipo',
-            'jugadores' => 'jugador',
-        ]);
     });
 
     // Rutas para gestionar los jugadores
@@ -171,4 +166,31 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
         Route::delete('/{jugador}', [PlayerController::class, 'destroy'])->name('players.destroy');
         Route::get('/', [PlayerController::class, 'index'])->name('players.index');
     });
+});
+
+// Rutas protegidas para la administración de torneos, equipos y jugadores
+Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function () {
+    // Ruta para mostrar jugadores de un equipo en un torneo
+    Route::get('tournaments/{torneoId}/teams/{equipoId}/players', [PlayerController::class, 'index'])
+        ->name('players.index');
+
+    // Ruta para crear un jugador en un equipo de un torneo
+    Route::get('tournaments/{torneoId}/teams/{equipoId}/players/create', [PlayerController::class, 'create'])
+        ->name('players.create');
+
+    // Ruta para almacenar un nuevo jugador
+    Route::post('tournaments/{torneoId}/teams/{equipoId}/players', [PlayerController::class, 'store'])
+        ->name('players.store');
+
+    // Ruta para editar un jugador existente
+    Route::get('tournaments/{torneoId}/teams/{equipoId}/players/{jugadorId}/edit', [PlayerController::class, 'edit'])
+        ->name('players.edit');
+
+    // Ruta para actualizar un jugador
+    Route::put('tournaments/{torneoId}/teams/{equipoId}/players/{jugadorId}', [PlayerController::class, 'update'])
+        ->name('players.update');
+
+    // Ruta para eliminar un jugador
+    Route::delete('tournaments/{torneoId}/teams/{equipoId}/players/{jugadorId}', [PlayerController::class, 'destroy'])
+        ->name('players.destroy');
 });
