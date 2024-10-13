@@ -24,7 +24,7 @@ class TeamController extends Controller
     $torneos = Torneo::all(); // Obtener todos los torneos
 
     // Verificar si se alcanzó el número máximo de equipos
-    if ($torneo->equipos->count() >= $torneo->number_of_teams) {
+    if ($torneo->equipos->count() >= $torneo->number_of_teams) {//corregir
         return redirect()->route('teams.index', $torneoId)
                          ->with('error', 'No se pueden registrar más equipos en este torneo.');
     }
