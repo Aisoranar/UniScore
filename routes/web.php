@@ -148,6 +148,8 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
     // Ruta para crear un partido
     Route::get('tournaments/{torneo}/teams/{equipo}/players', [PlayerController::class, 'index'])
     ->name('players.index');
+    Route::get('tournaments/{torneo}', [TournamentController::class, 'show'])->name('tournaments.show');
+
 
     // Rutas personalizadas para equipos dentro de torneos
     Route::prefix('torneos/{torneo}/equipos')->group(function () {
@@ -172,9 +174,12 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
 
 // Rutas protegidas para la administración de torneos, equipos y jugadores
 Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function () {
-    // Ruta para mostrar jugadores de un equipo en un torneo
+    // Rutas para mostrar jugadores de un equipo en un torneo
     Route::get('tournaments/{torneoId}/teams/{equipoId}/players', [PlayerController::class, 'index'])
         ->name('players.index');
+
+    Route::get('tournaments/{torneo}', [TournamentController::class, 'show'])
+        ->name('tournaments.show');
 
     // Ruta para crear un jugador en un equipo de un torneo
     Route::get('tournaments/{torneoId}/teams/{equipoId}/players/create', [PlayerController::class, 'create'])
@@ -196,3 +201,4 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
     Route::delete('tournaments/{torneoId}/teams/{equipoId}/players/{jugadorId}', [PlayerController::class, 'destroy'])
         ->name('players.destroy');
 });
+

@@ -33,15 +33,20 @@ class TournamentController extends Controller
         return redirect()->route('tournaments.index')->with('success', 'Torneo creado con éxito.');
     }
 
-    public function show(Torneo $torneo)
-    {
-        $torneo->load('equipos.jugadores', 'partidos', 'partidos.estadisticas');
+    public function show($id)
+{
+    $torneo = Torneo::findOrFail($id); // Asegúrate de obtener el torneo por ID
 
-        $totalEquipos = $torneo->equipos->count();
-        $equiposRestantes = $torneo->number_of_teams - $totalEquipos;
+    // Para depurar
 
-        return view('admin.tournaments.show', compact('torneo', 'equiposRestantes'));
-    }
+    $torneo->load('equipos.jugadores', 'partidos');
+    return view('admin.tournaments.show', compact('torneo'));
+}
+
+
+
+
+
 
     public function edit($id)
 {

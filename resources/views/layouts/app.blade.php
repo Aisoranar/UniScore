@@ -184,7 +184,7 @@
 <body class="bg-gray-100">
 
     <!-- Header -->
-    <header class="bg-white shadow-sm mb-4 navbar-custom" id="navbar">
+    <header class="bg-white shadow-sm mb-1 navbar-custom" id="navbar">
         <div class="container mx-auto p-4 navbar-custom">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
@@ -238,7 +238,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-1">
         @yield('content')
     </main>
 
