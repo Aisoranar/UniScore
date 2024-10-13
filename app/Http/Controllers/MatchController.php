@@ -9,14 +9,12 @@ use Illuminate\Http\Request;
 class MatchController extends Controller
 {
     public function index($torneoId)
-{
-    $torneo = Torneo::findOrFail($torneoId);
-    $partidos = Partido::where('torneo_id', $torneoId)->get();
+    {
+        $torneo = Torneo::findOrFail($torneoId);
+        $partidos = Partido::where('torneo_id', $torneoId)->get();
 
-    return view('admin.matches.index', compact('torneo', 'partidos'));
-}
-
-
+        return view('admin.matches.index', compact('torneo', 'partidos'));
+    }
 
     public function create(Torneo $torneo)
     {

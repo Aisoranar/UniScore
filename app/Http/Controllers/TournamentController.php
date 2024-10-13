@@ -36,28 +36,44 @@ class TournamentController extends Controller
     public function show(Torneo $torneo)
     {
         $torneo->load('equipos.jugadores', 'partidos', 'partidos.estadisticas');
-        return view('admin.tournaments.show', compact('torneo'));
+
+        $totalEquipos = $torneo->equipos->count();
+        $equiposRestantes = $torneo->number_of_teams - $totalEquipos;
+
+        return view('admin.tournaments.show', compact('torneo', 'equiposRestantes'));
     }
 
-    public function edit(Torneo $torneo)
-    {
-        return view('admin.tournaments.edit', compact('torneo'));
-    }
+    public function edit($id)
+{
+    $torneo = Torneo::findOrFail($id);
+    return view('admin.tournaments.edit', compact('torneo'));
+}
 
-    public function update(Request $request, Torneo $torneo)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'sport_type' => 'required|string|max:255',
-            'tournament_type' => 'required|string|max:255',
-            'number_of_teams' => 'required|integer|min:2',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
-        ]);
 
-        $torneo->update($request->all());
-        return redirect()->route('tournaments.index')->with('success', 'Torneo actualizado con éxito.');
-    }
+public function update(Request $request, Torneo $torneo)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'sport_type' => 'required|string|max:255',
+        'tournament_type' => 'required|string|max:255',
+        'number_of_teams' => 'required|integer|min:2',
+        'start_date' => 'required|date',
+        'end_date' => 'required|date|after:start_date',
+    ]);
+
+    // Actualiza el torneo con los nuevos datos
+    $torneo->update($request->only([
+        'name', 
+        'sport_type', 
+        'tournament_type', 
+        'number_of_teams', 
+        'start_date', 
+        'end_date'
+    ]));
+
+    return redirect()->route('tournaments.index')->with('success', 'Torneo actualizado con éxito.');
+}
+
 
     public function destroy(Torneo $torneo)
     {

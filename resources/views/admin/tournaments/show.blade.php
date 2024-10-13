@@ -2,23 +2,34 @@
 
 @section('content')
 <h1>{{ $torneo->name }}</h1>
-<p>Deporte: {{ $torneo->sport_type }}</p>
-<p>Tipo de Torneo: {{ $torneo->tournament_type }}</p>
-<p>Número de Equipos: {{ $torneo->number_of_teams }}</p>
-<p>Fecha de Inicio: {{ $torneo->start_date }}</p>
-<p>Fecha de Finalización: {{ $torneo->end_date }}</p>
+<p>Tipo de deporte: {{ $torneo->sport_type }}</p>
+<p>Tipo de torneo: {{ $torneo->tournament_type }}</p>
+<p>Fecha de inicio: {{ $torneo->start_date }}</p>
+<p>Fecha de fin: {{ $torneo->end_date }}</p>
 
-<h2>Equipos</h2>
+<h3>Equipos Registrados ({{ $torneo->equipos->count() }} / {{ $torneo->number_of_teams }})</h3>
+@if($equiposRestantes > 0)
+    <p>Aún faltan {{ $equiposRestantes }} equipos para completar el torneo.</p>
+@else
+    <p>¡El torneo está lleno!</p>
+@endif
+
 <ul>
     @foreach($torneo->equipos as $equipo)
-        <li>{{ $equipo->name }}</li>
+        <li>{{ $equipo->name }} ({{ $equipo->jugadores->count() }} jugadores)
+            <ul>
+                @foreach($equipo->jugadores as $jugador)
+                    <li>{{ $jugador->name }} - {{ $jugador->position }} - #{{ $jugador->number }}</li>
+                @endforeach
+            </ul>
+        </li>
     @endforeach
 </ul>
 
-<h2>Partidos</h2>
+<h3>Partidos</h3>
 <ul>
     @foreach($torneo->partidos as $partido)
-        <li>{{ $partido->equipoLocal->name }} vs {{ $partido->equipoVisitante->name }} - {{ $partido->match_date }}</li>
+        <li>{{ $partido->equipo_local->name }} vs {{ $partido->equipo_visitante->name }} - {{ $partido->match_date }} {{ $partido->match_time }}</li>
     @endforeach
 </ul>
 @endsection

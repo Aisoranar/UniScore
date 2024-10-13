@@ -1,2 +1,2 @@
-<!-- extends('welcome') -->
-@include('layouts.app-nav')
+ @extends('welcome') 
+<!--include('layouts.app-nav')-->
