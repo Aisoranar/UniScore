@@ -12,6 +12,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ $galeria->title }}</h5>
                         <p class="card-text">{{ $galeria->description }}</p>
+                        <a href="{{ route('galeria.show', $galeria->id) }}" class="btn btn-info">Ver Imagen Completa</a>
                         <a href="{{ route('galeria.edit', $galeria->id) }}" class="btn btn-primary">Editar</a>
                         <form action="{{ route('galeria.destroy', $galeria->id) }}" method="POST" class="d-inline">
                             @csrf
