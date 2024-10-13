@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>Agregar Jugador al Equipo: {{ $equipo->name }}</h1>
+<h1>Agregar Jugador</h1>
 
 <form action="{{ route('players.store', ['torneoId' => $torneo->id, 'equipoId' => $equipo->id]) }}" method="POST">
     @csrf
@@ -22,6 +22,15 @@
             <option value="Delantero">Delantero</option>
         </select>
     </div>
+    <div class="form-group">
+        <label for="equipo_id">Equipo</label>
+        <select name="equipo_id" class="form-control" required>
+            @foreach($equipos as $eq)
+                <option value="{{ $eq->id }}">{{ $eq->name }}</option>
+            @endforeach
+        </select>
+    </div>
     <button type="submit" class="btn btn-success">Guardar</button>
 </form>
+
 @endsection
