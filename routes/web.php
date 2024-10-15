@@ -229,15 +229,13 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('galeria')->group(functio
 
 // Rutas públicas
 Route::prefix('public')->group(function () {
-// Rutas públicas sin prefijo
     Route::get('/inicio', [PublicController::class, 'inicio'])->name('public.inicio');
     Route::get('/tournaments', [PublicController::class, 'tournaments'])->name('public.tournaments');
     Route::get('/teams', [PublicController::class, 'teams'])->name('public.teams');
     Route::get('/players', [PublicController::class, 'players'])->name('public.players');
     Route::get('/matches', [PublicController::class, 'matches'])->name('public.matches');
     Route::get('/results', [PublicController::class, 'results'])->name('public.results');
-    Route::get('/statistics', [PublicController::class, 'statistics'])->name('public.statistics');
+    Route::get('/statistics/{torneoId}/{equipoId}', [PublicController::class, 'statistics'])->name('public.statistics');
     Route::get('/gallery', [PublicController::class, 'gallery'])->name('public.gallery');
     Route::get('players/{torneoId}/{equipoId}', [PlayerController::class, 'index'])->name('players.index');
-
 });
