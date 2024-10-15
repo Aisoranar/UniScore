@@ -239,5 +239,7 @@ Route::prefix('public')->group(function () {
     Route::get('/gallery', [PublicController::class, 'gallery'])->name('public.gallery');
     Route::get('players/{torneoId}/{equipoId}', [PlayerController::class, 'index'])->name('players.index');
     Route::get('/tournaments/{id}', [TournamentController::class, 'show'])->name('tournaments.show');
+    Route::get('/teams/{torneo}', [PublicController::class, 'teams'])->name('teams.index');
+
 
 });

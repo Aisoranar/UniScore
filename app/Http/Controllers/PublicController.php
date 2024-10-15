@@ -53,11 +53,22 @@ class PublicController extends Controller
     /**
      * Mostrar la vista de los equipos.
      */
-    public function teams()
+    public function teams($torneoId = null)
     {
-        $equipos = Equipo::with('torneo')->get();
+        if ($torneoId) {
+            // Si se pasa un ID de torneo, filtramos por ese torneo
+            $torneo = Torneo::findOrFail($torneoId);
+            $equipos = Equipo::where('torneo_id', $torneoId)->with('torneo')->get(); // Filtrar equipos por torneo
+        } else {
+            // Si no hay un torneo específico, obtenemos todos los equipos con sus torneos
+            $equipos = Equipo::with('torneo')->get(); // Cargar equipos con su torneo
+        }
+    
         return view('public.teams', compact('equipos'));
     }
+    
+    
+    
 
     /**
      * Mostrar la vista de los torneos.
