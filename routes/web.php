@@ -85,12 +85,15 @@ Route::middleware('auth')->group(function () {
 });
 
 // Rutas para el perfil de los trainees
-Route::middleware(['auth'])->group(function () {
-    Route::get('/profile/{user_id}', [TraineeController::class, 'show'])->name('profile.show');
-    Route::get('/trainees', [TraineeController::class, 'index'])->name('trainees.index');
-    Route::get('/trainees/edit/{id}', [TraineeController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile/update/{user_id}', [TraineeController::class, 'update'])->name('profile.update');
+Route::middleware(['auth'])->prefix('profile')->group(function () {
+    Route::get('/{id}', [TraineeController::class, 'show'])
+        ->name('profile.show');
+    Route::put('/coach/{user_id}', [ProfileCoachController::class, 'update'])
+        ->name('profile.updateCoach');
+    Route::put('/{user_id}', [TraineeController::class, 'update'])
+        ->name('profile.update');
 });
+
 
 // Ruta para mostrar el home de usuarios autenticados
 Route::get('/home', [HomeController::class, 'index'])
@@ -115,14 +118,18 @@ Route::put('/perfil/{id}', [TraineeController::class, 'update'])
 
 
 // Rutas para el perfil del coach
-Route::middleware('auth')->group(function () {
-    Route::get('/coach/perfil/{id}', [ProfileCoachController::class, 'show'])
-        ->name('coach.perfil.show');
-    Route::get('/coach/perfil-edit/{id}', [ProfileCoachController::class, 'edit'])
-        ->name('coach.perfil.edit');
-    Route::put('/coach/perfil/{id}', [ProfileCoachController::class, 'update'])
-        ->name('coach.perfil.update');
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('profile')->group(function () {
+        // Perfil de Trainee
+        Route::get('/{id}', [TraineeController::class, 'show'])->name('profile.show');
+        Route::put('/{id}', [TraineeController::class, 'update'])->name('profile.update');
+
+        // Perfil de Coach
+        Route::get('/coach/{id}', [ProfileCoachController::class, 'show'])->name('coach.profile.show');
+        Route::put('/coach/{id}', [ProfileCoachController::class, 'update'])->name('coach.profile.update');
+    });
 });
+
 
 // Rutas para los perfiles
 Route::middleware(['auth'])->prefix('profile')->group(function () {
@@ -193,10 +200,11 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
     Route::get('tournaments/{torneoId}/teams/{equipoId}/players', [PlayerController::class, 'index'])
         ->name('players.index');
 
+    // Rutas para mostrar un torneo específico
     Route::get('tournaments/{torneo}', [TournamentController::class, 'show'])
         ->name('tournaments.show');
 
-    // Ruta para crear un jugador en un equipo de un torneo
+    // Rutas para crear un jugador en un equipo de un torneo
     Route::get('tournaments/{torneoId}/teams/{equipoId}/players/create', [PlayerController::class, 'create'])
         ->name('players.create');
 
@@ -215,7 +223,17 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('admin')->group(function 
     // Ruta para eliminar un jugador
     Route::delete('tournaments/{torneoId}/teams/{equipoId}/players/{jugadorId}', [PlayerController::class, 'destroy'])
         ->name('players.destroy');
+
+    // Rutas para equipos dentro de un torneo
+    Route::get('tournaments/{torneoId}/teams', [TeamsController::class, 'index'])->name('teams.index');
+    Route::get('tournaments/{torneoId}/teams/create', [TeamsController::class, 'create'])->name('teams.create');
+    Route::post('tournaments/{torneoId}/teams', [TeamsController::class, 'store'])->name('teams.store');
+    Route::get('tournaments/{torneoId}/teams/{equipoId}/edit', [TeamsController::class, 'edit'])->name('teams.edit');
+    Route::put('tournaments/{torneoId}/teams/{equipoId}', [TeamsController::class, 'update'])->name('teams.update');
+    Route::delete('tournaments/{torneoId}/teams/{equipoId}', [TeamsController::class, 'destroy'])->name('teams.destroy');
 });
+
+
 // Rutas para la gestión de la galería
 Route::middleware(['auth', 'role:superadmin'])->prefix('galeria')->group(function () {
     Route::get('/', [GaleriaController::class, 'index'])->name('galeria.index'); // Lista todas las galerías

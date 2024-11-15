@@ -1,102 +1,105 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Equipo;
 use App\Models\Torneo;
 use Illuminate\Http\Request;
 
-class TeamController extends Controller
+class TeamsController extends Controller
 {
-    // Listar equipos por torneo
+    /**
+     * Mostrar todos los equipos de un torneo.
+     */
     public function index($torneoId)
     {
-        $torneo = Torneo::findOrFail($torneoId);
-        $equipos = Equipo::where('torneo_id', $torneoId)->get();
+        $torneo = Torneo::findOrFail($torneoId); // Encuentra el torneo o muestra un error 404.
+        $equipos = $torneo->equipos()->get(); // Obtiene todos los equipos asociados al torneo.
 
-        return view('admin.teams.index', compact('torneo', 'equipos'));
+        return view('admin.teams.index', compact('equipos', 'torneo'));
     }
 
-    // Formulario para registrar un nuevo equipo
+    /**
+     * Mostrar el formulario para crear un nuevo equipo.
+     */
     public function create($torneoId)
-{
-    $torneo = Torneo::findOrFail($torneoId);
-    $torneos = Torneo::all(); // Obtener todos los torneos
+    {
+        $torneo = Torneo::findOrFail($torneoId); // Verifica que el torneo exista.
 
-    // Verificar si se alcanzó el número máximo de equipos
-    if ($torneo->equipos->count() >= $torneo->number_of_teams) {//corregir
-        return redirect()->route('teams.index', $torneoId)
-                         ->with('error', 'No se pueden registrar más equipos en este torneo.');
+        return view('admin.teams.create', compact('torneo'));
     }
 
-    return view('admin.teams.create', compact('torneo', 'torneos'));
-}
-
-    // Guardar el nuevo equipo y asociarlo al torneo
+    /**
+     * Guardar un nuevo equipo en la base de datos.
+     */
     public function store(Request $request, $torneoId)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'coach' => 'nullable|string|max:255',
+            'name' => 'required|string|max:255', // Valida que el nombre del equipo sea requerido y tenga un máximo de 255 caracteres.
+            'coach' => 'nullable|string|max:255', // El campo entrenador es opcional.
         ]);
 
-        $torneo = Torneo::findOrFail($torneoId);
+        $torneo = Torneo::findOrFail($torneoId); // Encuentra el torneo relacionado.
 
-        // Verificar si se alcanzó el número máximo de equipos
-        if ($torneo->equipos->count() >= $torneo->number_of_teams) {
-            return redirect()->route('teams.index', $torneoId)
-                             ->with('error', 'No se pueden registrar más equipos en este torneo.');
-        }
+        $torneo->equipos()->create([
+            'name' => $request->name,
+            'coach' => $request->coach,
+        ]);
 
-        $torneo->equipos()->create($request->only(['name', 'coach']));
-
-        return redirect()->route('teams.index', $torneoId)
-                         ->with('success', 'Equipo registrado con éxito.');
+        return redirect()->route('admin.teams.index', $torneoId)->with('success', 'Equipo agregado correctamente.');
     }
 
-    // Formulario para editar un equipo
+    /**
+     * Mostrar el formulario para editar un equipo existente.
+     */
     public function edit($torneoId, $equipoId)
     {
-        $torneo = Torneo::findOrFail($torneoId);
-        $equipo = Equipo::where('torneo_id', $torneoId)->findOrFail($equipoId);
+        $torneo = Torneo::findOrFail($torneoId); // Encuentra el torneo relacionado.
+        $equipo = Equipo::findOrFail($equipoId); // Encuentra el equipo a editar.
 
         return view('admin.teams.edit', compact('torneo', 'equipo'));
     }
 
-    // Actualizar los datos del equipo
+    /**
+     * Actualizar un equipo existente en la base de datos.
+     */
     public function update(Request $request, $torneoId, $equipoId)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'coach' => 'nullable|string|max:255',
+            'name' => 'required|string|max:255', // Valida que el nombre sea requerido.
+            'coach' => 'nullable|string|max:255', // El campo entrenador es opcional.
         ]);
 
-        $equipo = Equipo::where('torneo_id', $torneoId)->findOrFail($equipoId);
-        $equipo->update($request->only(['name', 'coach']));
+        $equipo = Equipo::findOrFail($equipoId); // Encuentra el equipo a actualizar.
 
-        return redirect()->route('teams.index', $torneoId)
-                         ->with('success', 'Equipo actualizado con éxito.');
+        $equipo->update([
+            'name' => $request->name,
+            'coach' => $request->coach,
+        ]);
+
+        return redirect()->route('admin.teams.index', $torneoId)->with('success', 'Equipo actualizado correctamente.');
     }
 
-    // Eliminar un equipo del torneo
+    /**
+     * Eliminar un equipo.
+     */
     public function destroy($torneoId, $equipoId)
     {
-        $torneo = Torneo::findOrFail($torneoId);
-        $equipo = Equipo::where('torneo_id', $torneoId)->findOrFail($equipoId);
+        $equipo = Equipo::findOrFail($equipoId); // Encuentra el equipo a eliminar.
+        $equipo->delete(); // Elimina el equipo.
 
-        // Verificar si el equipo pertenece al torneo
-        if ($equipo->torneo_id != $torneoId) {
-            return redirect()->route('teams.index', $torneoId)
-                             ->with('error', 'El equipo no pertenece a este torneo.');
-        }
+        return redirect()->route('admin.teams.index', $torneoId)->with('success', 'Equipo eliminado correctamente.');
+    }
 
-        // Eliminar jugadores asociados al equipo
-        $equipo->jugadores()->delete();
+    /**
+     * Mostrar los detalles de un equipo.
+     */
+    public function show($torneoId, $equipoId)
+    {
+        $torneo = Torneo::findOrFail($torneoId); // Encuentra el torneo relacionado.
+        $equipo = Equipo::findOrFail($equipoId); // Encuentra el equipo a mostrar.
 
-        // Eliminar el equipo
-        $equipo->delete();
-
-        return redirect()->route('teams.index', $torneoId)
-                         ->with('success', 'Equipo eliminado con éxito.');
+        return view('admin.teams.show', compact('torneo', 'equipo'));
     }
 }

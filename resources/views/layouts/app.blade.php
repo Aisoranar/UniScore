@@ -203,16 +203,16 @@
             </div>
             <nav class="menu mt-4 lg:mt-0">
                 <ul class="flex flex-col lg:flex-row items-center lg:items-center gap-4 lg:gap-8 lg:overflow-visible">
-                    <li><a href="{{ route('public.inicio') }}" class="nav-link"><i class="bi bi-house-door-fill mr-2"></i> Inicio</a></li>
+                    <li><a href="{{ route('inicio') }}" class="nav-link"><i class="bi bi-house-door-fill mr-2"></i> Inicio</a></li>
             
                     @guest
                         <!-- Enlaces para usuarios no autenticados (públicos) -->
-                        <li><a href="{{ route('public.tournaments') }}" class="nav-link"><i class="bi bi-calendar mr-2"></i> Torneos</a></li>
-                        <li><a href="{{ route('public.teams') }}" class="nav-link"><i class="bi bi-people-fill mr-2"></i> Equipos</a></li>
-                        <li><a href="{{ route('public.players') }}" class="nav-link"><i class="bi bi-list mr-2"></i> Jugadores</a></li>
-                        <li><a href="{{ route('public.matches') }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Partidos</a></li>
-                        <li><a href="{{ route('public.results') }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Resultados</a></li>
-                        <li><a href="{{ route('public.gallery') }}" class="nav-link"><i class="bi bi-image mr-2"></i> Galería</a></li>
+                        <li><a href="{{ route('tournaments') }}" class="nav-link"><i class="bi bi-calendar mr-2"></i> Torneos</a></li>
+                        <li><a href="{{ route('teams') }}" class="nav-link"><i class="bi bi-people-fill mr-2"></i> Equipos</a></li>
+                        <li><a href="{{ route('players') }}" class="nav-link"><i class="bi bi-list mr-2"></i> Jugadores</a></li>
+                        <li><a href="{{ route('matches') }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Partidos</a></li>
+                        <li><a href="{{ route('results') }}" class="nav-link"><i class="bi bi-star-fill mr-2"></i> Resultados</a></li>
+                        <li><a href="{{ route('gallery') }}" class="nav-link"><i class="bi bi-image mr-2"></i> Galería</a></li>
             
                         <li><a href="{{ route('login') }}" class="btn btn-primary"><i class="bi bi-person-fill mr-2"></i> Iniciar Sesión</a></li>
                     @else

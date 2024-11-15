@@ -19,6 +19,14 @@ class Torneo extends Model
     ];
 
     /**
+     * Conversión automática de atributos a tipos específicos.
+     */
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+    ];
+
+    /**
      * Relación con el modelo Equipo
      * Un torneo tiene muchos equipos.
      */
