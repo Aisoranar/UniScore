@@ -227,19 +227,17 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('galeria')->group(functio
     Route::delete('/{galeria}', [GaleriaController::class, 'destroy'])->name('galeria.destroy'); // Elimina una galería
 });
 
-// Rutas públicas
-Route::prefix('public')->group(function () {
-    Route::get('/inicio', [PublicController::class, 'inicio'])->name('public.inicio');
-    Route::get('/tournaments', [PublicController::class, 'tournaments'])->name('public.tournaments');
-    Route::get('/teams', [PublicController::class, 'teams'])->name('public.teams');
-    Route::get('/players', [PublicController::class, 'players'])->name('public.players');
-    Route::get('/matches', [PublicController::class, 'matches'])->name('public.matches');
-    Route::get('/results', [PublicController::class, 'results'])->name('public.results');
+
+    Route::get('/inicio', [PublicController::class, 'inicio'])->name('inicio');
+    Route::get('/tournaments', [PublicController::class, 'tournaments'])->name('tournaments');
+    Route::get('/teams', [PublicController::class, 'teams'])->name('teams');
+    Route::get('/players', [PublicController::class, 'players'])->name('players');
+    Route::get('/matches', [PublicController::class, 'matches'])->name('matches');
+    Route::get('/results', [PublicController::class, 'results'])->name('results');
     Route::get('/statistics/{torneoId}/{equipoId}', [PublicController::class, 'statistics'])->name('public.statistics');
-    Route::get('/gallery', [PublicController::class, 'gallery'])->name('public.gallery');
+    Route::get('/gallery', [PublicController::class, 'gallery'])->name('gallery');
     Route::get('players/{torneoId}/{equipoId}', [PlayerController::class, 'index'])->name('players.index');
     Route::get('/tournaments/{id}', [TournamentController::class, 'show'])->name('tournaments.show');
     Route::get('/teams/{torneo}', [PublicController::class, 'teams'])->name('teams.index');
 
 
-});
